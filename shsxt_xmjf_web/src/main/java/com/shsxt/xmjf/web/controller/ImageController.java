@@ -46,10 +46,12 @@ public class ImageController {
 
         try {
             sos = response.getOutputStream();
-            ImageIO.write(image,"jpg",sos);
 
             //将验证码存入session
             request.getSession().setAttribute("image",code);
+
+            //将图形验证码写入流
+            ImageIO.write(image,"jpg",sos);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

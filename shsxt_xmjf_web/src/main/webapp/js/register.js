@@ -17,6 +17,16 @@ $(function () {
         var code = $("#code").val();
 
         // console.log(phone+""+ code);//测试拿取前台值
-    })
+        if (isEmpty(phone)){
+            layer.tips("请输入手机号","#phone");
+            return;
+        }
+
+        if (isEmpty(code)){
+            layer.tips("请输入图片验证码","#code");
+            return;
+        }
+
+    });
 
 })
