@@ -21,13 +21,16 @@
     id, username, password, salt, status, mobile, email, type, last_login_ip, last_login_time,
     referer, addtime, addip, time
   </sql>
+
   <select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
     <include refid="Base_Column_List" />
     from bas_user
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <insert id="insert" parameterType="com.shsxt.xmjf.api.po.BasUser" >
+
+  <!--保存用户数据，返回用户主键-->
+  <insert id="insert" parameterType="com.shsxt.xmjf.api.po.BasUser" keyProperty="id" useGeneratedKeys="true" >
     insert into bas_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -118,6 +121,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="update" parameterType="com.shsxt.xmjf.api.po.BasUser" >
     update bas_user
     <set >

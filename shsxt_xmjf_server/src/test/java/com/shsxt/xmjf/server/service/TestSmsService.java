@@ -1,4 +1,4 @@
-package java.com.shsxt.xmjf.server.service;
+package com.shsxt.xmjf.server.service;
 
 import com.shsxt.xmjf.api.constants.XmjfConstant;
 import com.shsxt.xmjf.api.service.ISmsService;

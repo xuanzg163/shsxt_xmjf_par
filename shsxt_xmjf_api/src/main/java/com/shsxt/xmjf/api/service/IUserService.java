@@ -12,4 +12,10 @@ public interface IUserService {
      * 根据手机号码查询用户
      */
     public BasUser queryBasUserByPhone(String phone);
+
+    /**
+     * 用户注册
+     */
+    public void saveUser(String phone,String password,String code);
+
 }
