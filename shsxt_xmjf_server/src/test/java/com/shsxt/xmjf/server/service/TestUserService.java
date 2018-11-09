@@ -18,6 +18,6 @@ public class TestUserService extends TestBase{
 
     @Test
     public void test01(){
-        userService.saveUser("17512580668","123456","3333");
+        userService.saveUser("17512580668","123456","1412");
     }
 }

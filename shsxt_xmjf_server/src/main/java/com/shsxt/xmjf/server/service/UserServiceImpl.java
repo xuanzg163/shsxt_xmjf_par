@@ -38,6 +38,21 @@ public class UserServiceImpl implements IUserService {
     private SysLogMapper sysLogMapper;
 
     @Resource
+    private BasUserSecurityMapper basUserSecurityMapper;
+
+    @Resource
+    private BusAccountMapper busAccountMapper;
+
+    @Resource
+    private BusUserIntegralMapper busUserIntegralMapper;
+
+    @Resource
+    private BusIncomeStatMapper busIncomeStatMapper;
+
+    @Resource
+    private BusUserStatMapper busUserStatMapper;
+
+    @Resource
     private RedisTemplate<String,Object> redisTemplate;
 
 
@@ -63,6 +78,7 @@ public class UserServiceImpl implements IUserService {
      * @param password
      * @param code 2 注册，1登陆
      */
+    @Override
     public void saveUser(String phone, String password,String code) {
 
         /**
@@ -99,6 +115,95 @@ public class UserServiceImpl implements IUserService {
         initBasExperiencedGold(userId);
 
         initSysLog(userId);
+
+        initBasUserSecurity(userId);
+
+        initBusAccount(userId);
+
+        initBusUserIntegral(userId);
+
+        initBusIncomeStat(userId);
+
+        initBusUserStat(userId);
+    }
+
+    /**
+     * 初始化 用户统计表
+     * @param userId
+     */
+    private void initBusUserStat(int userId) {
+        BusUserStat busUserStat = new BusUserStat();
+        busUserStat.setUserId(userId);
+
+        AssertUtil.isTrue(busUserStatMapper.insert(busUserStat) < 1,
+                XmjfConstant.OPS_FAILED_MSG );
+    }
+
+    /**
+     *  初始化 用户收益表记录
+     * @param userId
+     */
+    private void initBusIncomeStat(int userId) {
+        BusIncomeStat busIncomeStat = new BusIncomeStat();
+
+        busIncomeStat.setUserId(userId);
+
+        AssertUtil.isTrue(busIncomeStatMapper.insert(busIncomeStat) < 1,
+                XmjfConstant.OPS_FAILED_MSG);
+
+    }
+
+    /**
+     *  初始化 用户积分记录
+     * @param userId
+     */
+    private void initBusUserIntegral(int userId) {
+        BusUserIntegral busUserIntegral = new BusUserIntegral();
+
+        busUserIntegral.setUserId(userId);
+        busUserIntegral.setTotal(0);
+        busUserIntegral.setUsable(0);
+
+        AssertUtil.isTrue(busUserIntegralMapper.insert(busUserIntegral) < 1,
+                XmjfConstant.OPS_FAILED_MSG);
+
+    }
+
+    /**
+     * 初始化 用户账户表记录信息
+     * @param userId
+     */
+    private void initBusAccount(int userId) {
+        BusAccount busAccount = new BusAccount();
+        busAccount.setUserId(userId);
+        busAccount.setTotal(BigDecimal.valueOf(0));
+        busAccount.setUsable(BigDecimal.valueOf(0));
+        busAccount.setCash(BigDecimal.valueOf(0));
+        busAccount.setFrozen(BigDecimal.valueOf(0));
+        busAccount.setWait(BigDecimal.valueOf(0));
+        busAccount.setRepay(BigDecimal.valueOf(0));
+
+        AssertUtil.isTrue(busAccountMapper.insert(busAccount) < 1,
+                XmjfConstant.OPS_FAILED_MSG);
+    }
+
+    /**
+     * 初始化 用户安全信息表
+     * @param userId
+     */
+    private void initBasUserSecurity(int userId) {
+        BasUserSecurity basUserSecurity = new BasUserSecurity();
+        basUserSecurity.setUserId(userId);
+        //手机是否验证
+        basUserSecurity.setPhoneStatus(0);
+        //邮箱认证
+        basUserSecurity.setEmailStatus(0);
+        //实名认证
+        basUserSecurity.setRealnameStatus(0);
+
+        AssertUtil.isTrue(basUserSecurityMapper.insert(basUserSecurity) < 1,
+                XmjfConstant.OPS_FAILED_MSG);
+
     }
 
     /**
