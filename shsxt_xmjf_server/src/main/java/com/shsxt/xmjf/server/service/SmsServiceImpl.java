@@ -73,7 +73,7 @@ public class SmsServiceImpl implements ISmsService {
             return;
         }
 
-        //加入redis缓存 设置失效时间 180s
+        //将手机号，短信类型 加入redis缓存 设置失效时间 180s
         String key="phone::"+phone+"::type::"+type;
         redisTemplate.opsForValue().set(key,code,180, TimeUnit.SECONDS);
 
