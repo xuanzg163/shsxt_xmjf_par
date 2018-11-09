@@ -1,6 +1,7 @@
 package com.shsxt.xmjf.api.service;
 
 
+import com.shsxt.xmjf.api.model.UserModel;
 import com.shsxt.xmjf.api.po.BasUser;
 import com.shsxt.xmjf.api.po.User;
 
@@ -17,5 +18,22 @@ public interface IUserService {
      * 用户注册
      */
     public void saveUser(String phone,String password,String code);
+
+    /**
+     * 用户登陆
+     * @param phone
+     * @param password
+     * @return
+     */
+    public UserModel login(String phone, String password);
+
+    /**
+     *  用户快速登陆
+     * @param phone
+     * @param code
+     * @return
+     */
+    public UserModel quickLogin(String phone,String code);
+
 
 }

@@ -53,6 +53,53 @@ $(function () {
         });
     });
 
+    /**
+     * 注册
+     */
+    $("#register").click(function () {
+        var phone = $("#phone").val();
+        var password=$("#password").val();
+        var code=$("#verification").val();
+
+        if (isEmpty(phone)){
+            layer.tips("请输入手机号","#phone");
+            return;
+        }
+
+        if (isEmpty(password)){
+            layer.tips("请输入密码","#password");
+            return;
+        }
+
+        if (isEmpty(code)){
+            layer.tips("请输入手机短信验证码","#code");
+            return;
+        }
+
+        /**
+         * 注册ajax
+         */
+        $.ajax({
+            type:"post",
+            url:ctx +"/user/register",
+            data:{
+                phone:phone,
+                password:password,
+                code:code
+            },
+            dataType:"json",
+            success:function (data) {
+                if (data.code==200){
+                    window.location.href=ctx+"/login";
+                } else{
+                    layer.tips(data.msg,"#register")
+                }
+            }
+        });
+
+
+    })
+
 });
 
 /**

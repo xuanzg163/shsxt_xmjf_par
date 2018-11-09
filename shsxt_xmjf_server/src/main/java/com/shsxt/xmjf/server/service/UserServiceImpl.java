@@ -3,7 +3,9 @@ package com.shsxt.xmjf.server.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.shsxt.xmjf.api.constants.XmjfConstant;
+import com.shsxt.xmjf.api.model.UserModel;
 import com.shsxt.xmjf.api.po.*;
+import com.shsxt.xmjf.api.service.ISmsService;
 import com.shsxt.xmjf.api.service.IUserService;
 import com.shsxt.xmjf.api.utils.AssertUtil;
 import com.shsxt.xmjf.api.utils.MD5;
@@ -51,6 +53,9 @@ public class UserServiceImpl implements IUserService {
 
     @Resource
     private BusUserStatMapper busUserStatMapper;
+
+    @Resource
+    private ISmsService smsService;
 
     @Resource
     private RedisTemplate<String,Object> redisTemplate;
@@ -125,6 +130,59 @@ public class UserServiceImpl implements IUserService {
         initBusIncomeStat(userId);
 
         initBusUserStat(userId);
+
+//        //发送短信
+//        smsService.sendSms(phone,XmjfConstant.SMS_REGISTER_SUCCESS_NOTIFY_TYPE);
+
+
+    }
+
+    /**
+     * 用户登陆
+     * @param phone
+     * @param password
+     * @return
+     */
+    @Override
+    public UserModel login(String phone, String password) {
+        return null;
+    }
+
+    /**
+     * 用户快速登陆
+     * @param phone
+     * @param code
+     * @return
+     */
+    @Override
+    public UserModel quickLogin(String phone, String code) {
+        AssertUtil.isTrue(StringUtils.isBlank(phone),"请输入手机号");
+        AssertUtil.isTrue(!(PhoneUtil.checkPhone(phone)),"手机号不合法!");
+        AssertUtil.isTrue(StringUtils.isBlank(code),"请输验证码");
+        String key="phone::"+phone+"::type::"+ XmjfConstant.SMS_LOGIN_TYPE;
+        AssertUtil.isTrue(!(redisTemplate.hasKey(key)),"验证码不存在或已过期!");
+        AssertUtil.isTrue(!(redisTemplate.opsForValue().get(key).toString().equals(code)),"验证码不正确!");
+        BasUser basUser=queryBasUserByPhone(phone);
+        AssertUtil.isTrue(null==basUser,"该手机号未注册,请先执行注册!");
+        UserModel userModel=new UserModel();
+        userModel.setUserName(basUser.getUsername());
+        userModel.setUserId(basUser.getId());
+        userModel.setMobile(basUser.getMobile());
+        /**
+         *  积分功能
+         *    连续登录 3天
+         *       奖励 100积分
+         *    连续登录5天
+         *       奖励 200积分
+         *    连续登录 7
+         *        500积分
+         *    每天均登陆
+         *       1000积分
+         *    积分达到
+         *        1500-2000   设置勋章  1星
+         *        2000-2500   设置      1个月
+         */
+        return userModel;
     }
 
     /**
@@ -275,6 +333,7 @@ public class UserServiceImpl implements IUserService {
         basUser.setAddtime(new Date());
         basUser.setType(1);
         basUser.setStatus(1);
+        basUser.setUsername(phone);
         AssertUtil.isTrue(basUserMapper.insert(basUser)<1,XmjfConstant.OPS_FAILED_MSG);
 
         return basUser.getId();

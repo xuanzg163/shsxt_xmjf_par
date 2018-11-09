@@ -23,6 +23,7 @@ public class XmjfConstant {
      */
     public static final int SMS_LOGIN_TYPE=1;
     public static final int SMS_REGISTER_TYPE=2;
+    public static final int SMS_REGISTER_SUCCESS_NOTIFY_TYPE=3;
 
     /**
      * 阿里云短信常量配置
@@ -34,5 +35,6 @@ public class XmjfConstant {
     public static final String SMS_SIGN="小马金服";
     public static final String SMS_REGISTER_CODE="SMS_115100107";
     public static final String SMS_LOGIN_CODE="SMS_109450111";
+    public static final String SMS_REGISTER_SUCCESS_NOTIFY_CODE="SMS_109450119";
 
 }
