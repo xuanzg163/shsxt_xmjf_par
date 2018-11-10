@@ -145,7 +145,24 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserModel login(String phone, String password) {
-        return null;
+        UserModel userModel = new UserModel();
+        AssertUtil.isTrue(StringUtils.isBlank(phone),"请输入手机号");
+        AssertUtil.isTrue(!(PhoneUtil.checkPhone(phone)),"手机号不合法");
+        AssertUtil.isTrue(StringUtils.isBlank(password),"请输入密码");
+
+        //依据手机号查询用户
+        BasUser basUser = queryBasUserByPhone(phone);
+
+        //获取用户的盐值
+        String salt = basUser.getSalt();
+        AssertUtil.isTrue(null == basUser,"手机号为注册，请先行注册");
+        AssertUtil.isTrue(!(basUser.getPassword().equals(MD5.toMD5(password+salt)))
+                ,"用户密码不正确");
+        userModel.setUserName(basUser.getUsername());
+        userModel.setUserId(basUser.getId());
+        userModel.setMobile(basUser.getMobile());
+
+        return userModel;
     }
 
     /**
@@ -159,9 +176,10 @@ public class UserServiceImpl implements IUserService {
         AssertUtil.isTrue(StringUtils.isBlank(phone),"请输入手机号");
         AssertUtil.isTrue(!(PhoneUtil.checkPhone(phone)),"手机号不合法!");
         AssertUtil.isTrue(StringUtils.isBlank(code),"请输验证码");
+
+        //存储在redis上的key值
         String key="phone::"+phone+"::type::"+ XmjfConstant.SMS_LOGIN_TYPE;
         AssertUtil.isTrue(!(redisTemplate.hasKey(key)),"验证码不存在或已过期!");
-
         AssertUtil.isTrue(!(redisTemplate.opsForValue().get(key).toString().equals(code)),"验证码不正确!");
         BasUser basUser=queryBasUserByPhone(phone);
         AssertUtil.isTrue(null==basUser,"该手机号未注册,请先执行注册!");

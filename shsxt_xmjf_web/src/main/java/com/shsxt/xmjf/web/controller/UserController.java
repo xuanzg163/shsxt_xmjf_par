@@ -60,12 +60,47 @@ public class UserController {
         return resultInfo;
     }
 
+    /**
+     * 用户快速登陆
+     * @param phone
+     * @param code
+     * @param session
+     * @return
+     */
     @RequestMapping("user/quickLogin")
     @ResponseBody
     public ResultInfo quickLogin(String phone, String code , HttpSession session) {
         ResultInfo resultInfo = new ResultInfo();
         try {
             UserModel userModel = userService.quickLogin(phone, code);
+
+            //将用户信息存入session
+            session.setAttribute(XmjfConstant.SESSION_USER,userModel);
+        } catch (BusiException e) {
+            e.printStackTrace();
+            resultInfo.setCode(e.getCode());
+            resultInfo.setMsg(e.getMsg());
+        } catch (Exception e){
+            e.printStackTrace();
+            resultInfo.setCode(XmjfConstant.OPS_FAILED_CODE);
+            resultInfo.setMsg(XmjfConstant.OPS_FAILED_MSG);
+        }
+        return resultInfo;
+    }
+
+    /**
+     * 用户登陆
+     * @param phone
+     * @param password
+     * @param session
+     * @return
+     */
+    @RequestMapping("user/login")
+    @ResponseBody
+    public ResultInfo login(String phone, String password , HttpSession session) {
+        ResultInfo resultInfo = new ResultInfo();
+        try {
+            UserModel userModel = userService.login(phone, password);
 
             //将用户信息存入session
             session.setAttribute(XmjfConstant.SESSION_USER,userModel);
