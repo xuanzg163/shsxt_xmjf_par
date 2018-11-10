@@ -161,6 +161,7 @@ public class UserServiceImpl implements IUserService {
         AssertUtil.isTrue(StringUtils.isBlank(code),"请输验证码");
         String key="phone::"+phone+"::type::"+ XmjfConstant.SMS_LOGIN_TYPE;
         AssertUtil.isTrue(!(redisTemplate.hasKey(key)),"验证码不存在或已过期!");
+
         AssertUtil.isTrue(!(redisTemplate.opsForValue().get(key).toString().equals(code)),"验证码不正确!");
         BasUser basUser=queryBasUserByPhone(phone);
         AssertUtil.isTrue(null==basUser,"该手机号未注册,请先执行注册!");

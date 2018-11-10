@@ -1,36 +1,36 @@
 
-/*页面加载调用方法*/
+/**
+ * 页面加载完毕生效
+ * 用户快速登陆
+ *
+ */
 $(function () {
 
     /**
-     * 点击验证码生成新的验证码
+     * 点击更换图形验证码
      */
     $(".validImg").click(function () {
-        $(this).attr("src",ctx+"/image");
+        $(this).attr("src", ctx + "/image");
     });
 
-    /**
-     * 获取验证码
-     */
-    $("#clickMes").click(function () {
-        var phone = $("#phone").val();
-        var code = $("#code").val();
 
-        // console.log(phone+""+ code);//测试拿取前台值
-        if (isEmpty(phone)){
-            layer.tips("请输入手机号","#phone");
+    $("#clickMes").click(function () {
+
+        var phone=$("#phone").val();
+        var code=$("#code").val();
+
+        if(isEmpty(phone)){
+            layer.tips("请输入手机号!","#phone");
             return;
         }
 
-        if (isEmpty(code)){
-            layer.tips("请输入图片验证码","#code");
+        if(isEmpty(code)){
+            layer.tips("请输入图片验证码!","#code");
             return;
         }
 
         /**
-         * Ajax
-         * 短信发送
-         * type 2 注册
+         * 发送短信ajax
          */
         $.ajax({
             type:"post",
@@ -38,7 +38,7 @@ $(function () {
             data:{
                 phone:phone,
                 imageCode:code,
-                type:2
+                type:1
             },
             dataType:"json",
             success:function (data) {
@@ -52,70 +52,68 @@ $(function () {
                 }
             }
         });
+
     });
 
+
     /**
-     * 注册
+     * 快速登陆
      */
-    $("#register").click(function () {
-        var phone = $("#phone").val();
-        var password=$("#password").val();
+    $("#login").click(function () {
+        var phone=$("#phone").val();
         var code=$("#verification").val();
 
-        if (isEmpty(phone)){
-            layer.tips("请输入手机号","#phone");
+        console.log(code);
+
+        if(isEmpty(phone)){
+            layer.tips("请输入手机号!","#phone");
             return;
         }
 
-        if (isEmpty(password)){
-            layer.tips("请输入密码","#password");
-            return;
-        }
-
-        if (isEmpty(code)){
-            layer.tips("请输入手机短信验证码","#code");
+        if(isEmpty(code)){
+            layer.tips("请输入手机验证码!","#code");
             return;
         }
 
         /**
-         * 注册ajax
+         * 快速登陆ajax
          */
         $.ajax({
             type:"post",
-            url:ctx +"/user/register",
+            url:ctx+"/user/quickLogin",
             data:{
                 phone:phone,
-                password:password,
                 code:code
             },
             dataType:"json",
             success:function (data) {
-                if (data.code==200){
-                    window.location.href=ctx+"/login";
-                } else{
-                    layer.tips(data.msg,"#register")
+                if(data.code==200){
+                    window.location.href=ctx+"/index";
+                }else{
+                    layer.tips(data.msg,"#login");
                 }
             }
+
         });
 
+    });
 
-    })
 
 });
 
+
 /**
- * 按钮倒计时禁用
+ * 定时器
  */
-function djs() {
-    //按钮禁用时间
-    var time = 60;
-    setInterval(function () {
-        if (time > 1){
+function  djs() {
+    var time=60;
+    var intervalId= setInterval(function () {
+        if(time>=1){
             $("#clickMes").attr("disabled",true);
             $("#clickMes").val("("+time+"秒)");
             $("#clickMes").css("background","#7c7c7c");
             time--;
-        } else{
+        }else{
             $("#clickMes").attr("disabled",false);
             $("#clickMes").val("获取验证码");
             $("#clickMes").css("background","#fcb22f");

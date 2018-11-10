@@ -3,6 +3,7 @@ package com.shsxt.xmjf.web.controller;
 import com.shsxt.xmjf.api.constants.XmjfConstant;
 import com.shsxt.xmjf.api.exceptions.BusiException;
 import com.shsxt.xmjf.api.model.ResultInfo;
+import com.shsxt.xmjf.api.model.UserModel;
 import com.shsxt.xmjf.api.po.User;
 import com.shsxt.xmjf.api.service.IUserService;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author zhangxuan
@@ -60,10 +62,13 @@ public class UserController {
 
     @RequestMapping("user/quickLogin")
     @ResponseBody
-    public ResultInfo quickLogin(String phone,String code) {
+    public ResultInfo quickLogin(String phone, String code , HttpSession session) {
         ResultInfo resultInfo = new ResultInfo();
         try {
-            userService.quickLogin(phone,code);
+            UserModel userModel = userService.quickLogin(phone, code);
+
+            //将用户信息存入session
+            session.setAttribute(XmjfConstant.SESSION_USER,userModel);
         } catch (BusiException e) {
             e.printStackTrace();
             resultInfo.setCode(e.getCode());
