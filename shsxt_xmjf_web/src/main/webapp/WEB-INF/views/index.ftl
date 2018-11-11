@@ -30,11 +30,11 @@
             <a href="${ctx}/introduce?0?4">关于我们</a>
         </div>
         <div class="header_button">
-        <#if user??>
+        <#if userInfo??>
             <div id="hasUserId">
 
                 <div class='btn login' style="margin:36px auto 0; width: 164px;border:1px solid #fff;background: transparent">
-                    <p>${user.mobile}<img style="margin:15px 0 0 5px;" src="/img/xl-icon.png" alt=""></p>
+                    <p>${userInfo.mobile}<img style="margin:15px 0 0 5px;" src="/img/xl-icon.png" alt=""></p>
                 </div>
                 <div id="option" class="option display">
                     <div class="option-message">

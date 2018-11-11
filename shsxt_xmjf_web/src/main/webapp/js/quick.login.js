@@ -89,9 +89,9 @@ $(function () {
             success:function (data) {
                 if(data.code==200){
                     window.location.href=ctx+"/index";
-                }else{
-                    layer.tips(data.msg,"#login");
-                }
+            }else{
+                layer.tips(data.msg,"#login");
+    }
             }
 
         });
