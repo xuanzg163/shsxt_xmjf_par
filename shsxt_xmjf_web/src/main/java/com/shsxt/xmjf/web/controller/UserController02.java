@@ -6,7 +6,6 @@ import com.shsxt.xmjf.api.model.ResultInfo;
 import com.shsxt.xmjf.api.model.UserModel;
 import com.shsxt.xmjf.api.po.User;
 import com.shsxt.xmjf.api.service.IUserService;
-import com.shsxt.xmjf.web.aop.annotations.RequireLogin;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +24,8 @@ import java.io.IOException;
  * @time 13:59
  */
 
-@Controller
-public class UserController {
+//@Controller
+public class UserController02 {
 
     @Resource
     private IUserService userService;
@@ -49,7 +48,18 @@ public class UserController {
     @ResponseBody
     public ResultInfo register(String phone, String password, String code) {
         ResultInfo resultInfo = new ResultInfo();
-        userService.saveUser(phone, password, code);
+
+        try {
+            userService.saveUser(phone, password, code);
+        } catch (BusiException e) {
+            e.printStackTrace();
+            resultInfo.setCode(e.getCode());
+            resultInfo.setMsg(e.getMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultInfo.setCode(XmjfConstant.OPS_FAILED_CODE);
+            resultInfo.setMsg(XmjfConstant.OPS_FAILED_MSG);
+        }
 
         return resultInfo;
     }
@@ -66,10 +76,20 @@ public class UserController {
     @ResponseBody
     public ResultInfo quickLogin(String phone, String code, HttpSession session) {
         ResultInfo resultInfo = new ResultInfo();
-        UserModel userModel = userService.quickLogin(phone, code);
+        try {
+            UserModel userModel = userService.quickLogin(phone, code);
 
-        //将用户信息存入session
-        session.setAttribute(XmjfConstant.SESSION_USER, userModel);
+            //将用户信息存入session
+            session.setAttribute(XmjfConstant.SESSION_USER, userModel);
+        } catch (BusiException e) {
+            e.printStackTrace();
+            resultInfo.setCode(e.getCode());
+            resultInfo.setMsg(e.getMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultInfo.setCode(XmjfConstant.OPS_FAILED_CODE);
+            resultInfo.setMsg(XmjfConstant.OPS_FAILED_MSG);
+        }
         return resultInfo;
     }
 
@@ -89,6 +109,7 @@ public class UserController {
 
         //将用户信息存入session
         session.setAttribute(XmjfConstant.SESSION_USER, userModel);
+
         return resultInfo;
     }
 
