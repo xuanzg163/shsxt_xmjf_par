@@ -53,7 +53,7 @@ public class XmjfConstant {
     public static final String SMS_SIGN="MikuGames";
     public static final String SMS_REGISTER_CODE="SMS_150736238";
     public static final String SMS_LOGIN_CODE="SMS_150736683";
-    public static final String SMS_REGISTER_SUCCESS_NOTIFY_CODE="SMS_150736683";
+    public static final String SMS_REGISTER_SUCCESS_NOTIFY_CODE="SMS_150742429";
 
 
 
