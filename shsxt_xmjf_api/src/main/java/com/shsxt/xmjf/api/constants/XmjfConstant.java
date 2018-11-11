@@ -34,13 +34,27 @@ public class XmjfConstant {
     /**
      * 阿里云短信常量配置
      */
-    public static final String SMS_AK="LTAIftPLNzhgsHmx";
+    /*public static final String SMS_AK="LTAIftPLNzhgsHmx";
     public static final String SMS_SK="VgLO26MfrjUiEohAZVJ5YfLsjl8p3J";
     public static final String SMS_PRODUCT="Dysmsapi";
     public static final String SMS_DOMAIN="dysmsapi.aliyuncs.com";
     public static final String SMS_SIGN="小马金服";
     public static final String SMS_REGISTER_CODE="SMS_115100107";
     public static final String SMS_LOGIN_CODE="SMS_109450111";
-    public static final String SMS_REGISTER_SUCCESS_NOTIFY_CODE="SMS_109450119";
+    public static final String SMS_REGISTER_SUCCESS_NOTIFY_CODE="SMS_109450119";*/
+
+    /**
+     * 备用短信配置常量
+     */
+    public static final String SMS_AK="LTAI71HGQAm4FhJl";
+    public static final String SMS_SK="v4Rykey4OactIwgB5wQUvt4OqRyaP3";
+    public static final String SMS_PRODUCT="Dysmsapi";
+    public static final String SMS_DOMAIN="dysmsapi.aliyuncs.com";
+    public static final String SMS_SIGN="MikuGames";
+    public static final String SMS_REGISTER_CODE="SMS_150736238";
+    public static final String SMS_LOGIN_CODE="SMS_150736683";
+    public static final String SMS_REGISTER_SUCCESS_NOTIFY_CODE="SMS_150736683";
+
+
 
 }
