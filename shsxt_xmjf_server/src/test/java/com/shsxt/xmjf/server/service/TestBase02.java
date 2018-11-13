@@ -11,6 +11,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @time 16:48
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring02.xml"})
+@ContextConfiguration(locations = {"classpath:spring.xml"})
 public class TestBase02 {
 }
