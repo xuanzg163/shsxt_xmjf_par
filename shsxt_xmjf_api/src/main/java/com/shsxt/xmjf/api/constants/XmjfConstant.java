@@ -25,6 +25,13 @@ public class XmjfConstant {
     public static final String SESSION_USER = "userInfo";
 
     /**
+     * 投资页页码展示
+     */
+    public static final int PAGE_NUM = 1;
+    public static final int PAGE_SIZE = 10;
+
+
+    /**
      * 短信类型定义
      */
     public static final int SMS_LOGIN_TYPE=1;
