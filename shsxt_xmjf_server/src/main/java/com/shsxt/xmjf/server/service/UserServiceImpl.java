@@ -15,6 +15,7 @@ import com.shsxt.xmjf.server.db.dao.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -57,24 +58,67 @@ public class UserServiceImpl implements IUserService {
     @Resource
     private ISmsService smsService;
 
+    @Resource(name="redisTemplate")
+    private ValueOperations valueOperations;
+
     @Resource
     private RedisTemplate<String,Object> redisTemplate;
 
 
+    /**
+     * 根据用户id查询用户
+     * 添加redis增加访问速度，优化用户体验
+     * @param userId
+     * @return
+     */
     @Override
     public User queryUserByUserId(Integer userId) {
-        return userDao.queryUserByUserId(userId);
+        /**
+         * redis的实现思路
+            //先到redis中查询
+            //存在获取数据
+            //不存在，到数据库中查询，
+            //存在，存数据到redis
+            //不存在，不处理
+         */
+
+        //获取redis的key
+        String key = "user::userId::"+userId;
+
+        //获取存到redis中对应key的user
+        User user = (User) valueOperations.get(key);
+
+        //判断user
+        if (null == user){
+            //根据id查询数据库中的user
+            user = userDao.queryUserByUserId(userId);
+            if (null != user){
+                //数据库中存在user，将对应user存值到redis
+                valueOperations.set(key,user);
+            }
+        }
+
+        return user;
     }
 
     /**
      *  验证手机号的唯一性
      *  利用手机号码，查询用户
+     *  加入redis缓存
      * @param phone
      * @return
      */
     @Override
     public BasUser queryBasUserByPhone(String phone) {
-        return basUserMapper.queryBasUserByPhone(phone);
+        String key = "user::phone::" + phone;
+        BasUser basUser = (BasUser) valueOperations.get(key);
+        if (null == basUser) {
+           basUser = basUserMapper.queryBasUserByPhone(phone);
+           if (basUser != null){
+               valueOperations.set(key,basUser);
+           }
+        }
+        return basUser;
     }
 
     /**
