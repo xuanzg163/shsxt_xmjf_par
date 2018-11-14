@@ -17,14 +17,28 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("item")
-public class BasItemController {
+public class BasItemController extends BaseControl {
 
     @Resource
     private IBasItemService basItemService;
 
+    /**
+     * 查询投资列表
+     * @param basItemQuery
+     * @return
+     */
     @RequestMapping("list")
     @ResponseBody
     public PageInfo<Map<String,Object>> queryItemsByParams(BasItemQuery basItemQuery){
         return basItemService.queryItemsByParams(basItemQuery);
+    }
+
+    /**
+     * 显示投资列表
+     * @return
+     */
+    @RequestMapping("index")
+    public String index() {
+        return "invest_list";
     }
 }
