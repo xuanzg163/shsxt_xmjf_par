@@ -18,4 +18,10 @@ public interface IBasItemService {
      * @return
      */
     public PageInfo<Map<String,Object>> queryItemsByParams(BasItemQuery basItemQuery);
+
+    /**
+     * 更新投资状态
+     * @param itemId
+     */
+    void updateBasItemStatusToOpen(Integer itemId);
 }

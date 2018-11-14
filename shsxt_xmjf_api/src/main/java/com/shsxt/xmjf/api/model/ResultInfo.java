@@ -6,6 +6,11 @@ public class ResultInfo implements Serializable{
     private static final long serialVersionUID = 1679258444606548109L;
     private Integer code=200;
     private String msg="操作成功";
+    public ResultInfo() {}
+
+    public ResultInfo(String msg) {
+        this.msg = msg;
+    }
 
     public Integer getCode() {
         return code;

@@ -1,6 +1,7 @@
 package com.shsxt.xmjf.web.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.shsxt.xmjf.api.model.ResultInfo;
 import com.shsxt.xmjf.api.querys.BasItemQuery;
 import com.shsxt.xmjf.api.service.IBasItemService;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,17 @@ public class BasItemController extends BaseControl {
     @Resource
     private IBasItemService basItemService;
 
+    /**
+     * 更新投资状态
+     * @param itemId
+     * @return
+     */
+    @RequestMapping("updateBasItemStatusToOpen")
+    @ResponseBody
+    public ResultInfo updateBasItemStatusToOpen(Integer itemId) {
+        basItemService.updateBasItemStatusToOpen(itemId);
+        return new ResultInfo("更新成功");
+    }
     /**
      * 查询投资列表
      * @param basItemQuery

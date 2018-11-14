@@ -10,7 +10,7 @@
     <script type="text/javascript" src="${ctx}/js/assets/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/common.js"></script>
     <script type="text/javascript" src="${ctx}/js/layer/layer.js"></script>
-    <script type="text/javascript" src="${ctx}/js/assets/radialIndicator.js"></script>
+    <script type="text/javascript" src="${ctx}/js/radialIndicator.min.js"></script>
     <script type="text/javascript" >
         var ctx="${ctx}";
     </script>
@@ -60,13 +60,13 @@
     <table class="list_table">
         <thead>
         <tr class="table_header">
-            <th style="width: 196px;" id="itemRate" class="order_item ketou" data-name="item.item_rate">
+            <th style="width: 196px;" id="itemRate" class=" order_item ketou" data-name="item.item_rate">
                 预期年化收益</th>
-            <th id="itemCycle" class="order_item ketou" data-name="item.item_cycle" style="">期限</th>
-            <th class="lishi" style="display: none;">预期年化收益</th>
-            <th class="lishi" style="display: none;">期限</th>
+            <th id="itemCycle"   class="order_item ketou" data-name="item.item_cycle" style="">期限</th>
+            <th  style="display: none;">预期年化收益</th>
+            <th style="display: none;">期限</th>
             <th>
-                <span class="lishi" style="display: none;">产品</span>
+                <span class="abc" style="display: none;">产品</span>
                 <select id="itemType" class="ketou" style=""  onchange="initItemData(this.value)">
                     <option value="">产品</option>
                     <option value="2">车商宝</option>
