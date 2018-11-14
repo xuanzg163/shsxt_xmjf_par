@@ -88,7 +88,7 @@ public class BasItemServiceImpl implements IBasItemService {
         /**
          * 模糊查找itemList* key  清除缓存操作
          */
-        Set<String> keys = redisTemplate.keys("itemList");
+        Set<String> keys = redisTemplate.keys("itemList*");
         redisTemplate.delete(keys);
 
     }
