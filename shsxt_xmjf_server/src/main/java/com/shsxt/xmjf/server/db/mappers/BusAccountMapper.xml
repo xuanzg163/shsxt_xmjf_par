@@ -104,4 +104,11 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--查询用户的账户记录-->
+  <select id="queryBusAccountByUserId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from bus_account
+    where user_id=#{userId}
+  </select>
 </mapper>
