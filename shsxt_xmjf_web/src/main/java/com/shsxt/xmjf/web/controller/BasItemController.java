@@ -2,13 +2,16 @@ package com.shsxt.xmjf.web.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.shsxt.xmjf.api.model.ResultInfo;
+import com.shsxt.xmjf.api.po.BasItem;
 import com.shsxt.xmjf.api.querys.BasItemQuery;
 import com.shsxt.xmjf.api.service.IBasItemService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -22,6 +25,18 @@ public class BasItemController extends BaseControl {
 
     @Resource
     private IBasItemService basItemService;
+
+    /**
+     * 显示投资项目详情
+     * @return
+     */
+    @RequestMapping("details")
+    public String details(Integer itemId, Model model, HttpSession session) {
+        BasItem basItem = basItemService.queryBasItemByItemId(itemId);
+        model.addAttribute("item",basItem);
+         
+        return "details";
+    }
 
     /**
      * 更新投资状态

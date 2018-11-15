@@ -3,18 +3,18 @@ $(function () {
     loadInvestListData();
 
 
-   $(".tab").click(function () {
+    $(".tab").click(function () {
         //$(".tab").removeClass("list_active");
         $(this).addClass("list_active");
         $(".tab").not(this).removeClass("list_active");
-       var itemCycle=$(this).index();
-       var isHistory=0;
-       if(itemCycle==4){
-           isHistory=1;
-       }
+        var itemCycle=$(this).index();
+        var isHistory=0;
+        if(itemCycle==4){
+            isHistory=1;
+        }
         var itemType=$("#itemType").val();
-       loadInvestListData(itemCycle,itemType,isHistory);
-   });
+        loadInvestListData(itemCycle,itemType,isHistory);
+    });
 
 
     /*$(".order_item").click(function () {
@@ -86,108 +86,109 @@ function initTrHtml(list) {
         var trs="";
         for(var i=0;i<list.length;i++){
             var temp=list[i];
-             trs=trs+"<tr>";
-                /**
-                 * 拼接单元格
-                 * td
-                 */
-                trs=trs+"<td>";
-                trs=trs+"<strong>"+temp.item_rate+"</strong>%";
-                  if(temp.item_add_rate>0){
-                    trs=trs+"<span>+"+temp.item_add_rate+"%</span>";
-                  }
-                trs=trs+"</td>";
-                /**
-                 * 项目期限
-                 */
-                trs=trs+"<td>";
-                  if(temp.item_cycle_unit==1){
-                      trs=trs+temp.item_cycle+"|天";
-                  }
-                    if(temp.item_cycle_unit==2){
-                        trs=trs+temp.item_cycle+"|月";
-                    }
+            trs=trs+"<tr>";
+            /**
+             * 拼接单元格
+             * td
+             */
+            trs=trs+"<td>";
+            trs=trs+"<strong>"+temp.item_rate+"</strong>%";
+            if(temp.item_add_rate>0){
+                trs=trs+"<span>+"+temp.item_add_rate+"%</span>";
+            }
+            trs=trs+"</td>";
+            /**
+             * 项目期限
+             */
+            trs=trs+"<td>";
+            if(temp.item_cycle_unit==1){
+                trs=trs+temp.item_cycle+"|天";
+            }
+            if(temp.item_cycle_unit==2){
+                trs=trs+temp.item_cycle+"|月";
+            }
 
-                    if(temp.item_cycle_unit==3){
-                        trs=trs+temp.item_cycle+"|季";
-                    }
-                    if(temp.item_cycle_unit==4){
-                        trs=trs+temp.item_cycle+"|年";
-                    }
-                trs+"</td>";
+            if(temp.item_cycle_unit==3){
+                trs=trs+temp.item_cycle+"|季";
+            }
+            if(temp.item_cycle_unit==4){
+                trs=trs+temp.item_cycle+"|年";
+            }
+            trs+"</td>";
 
-                // 项目名称
-                trs=trs+"<td>";
-                   trs=trs+temp.item_name;
-                   if(temp.item_isnew==1){
-                        trs=trs+"<strong class='colorful' new>NEW</strong>";
-                   }
-                   if(temp.item_isnew==0 && temp.move_vip==1){
-                        trs=trs+"<strong class='colorful' app>APP</strong>";
-                   }
-                    if(temp.item_isnew==0 && temp.move_vip==0 && temp.item_isrecommend ==1){
-                        trs=trs+"<strong class='colorful' hot>HOT</strong>";
-                    }
-                    if(temp.item_isnew==0 && temp.move_vip==0 && temp.item_isrecommend ==0 && !(isEmpty(temp.password))){
-                        trs=trs+"<strong class='colorful' psw>LOCK</strong>";
-                    }
-                trs=trs+"</td>";
-
-
-                // 信用等级
-                trs=trs+"<td class='trust_range'>";
-                   if(temp.total>90){
-                          trs=trs+"A+";
-                      }
-                   if(temp.total>85 && temp.total<=90){
-                        trs=trs+"A";
-                    }
-                    if(temp.total>75 && temp.total<=85){
-                        trs=trs+"A-";
-                    }
-                    if(temp.total>65 && temp.total<=75){
-                        trs=trs+"B";
-                    }
-                trs=trs+"</td>";
-
-                 // 担保机构
-               trs=trs+"<td><image src='/img/logo.png'></image></td>";
+            // 项目名称
+            trs=trs+"<td>";
+            trs=trs+temp.item_name;
+            if(temp.item_isnew==1){
+                trs=trs+"<strong class='colorful' new>NEW</strong>";
+            }
+            if(temp.item_isnew==0 && temp.move_vip==1){
+                trs=trs+"<strong class='colorful' app>APP</strong>";
+            }
+            if(temp.item_isnew==0 && temp.move_vip==0 && temp.item_isrecommend ==1){
+                trs=trs+"<strong class='colorful' hot>HOT</strong>";
+            }
+            if(temp.item_isnew==0 && temp.move_vip==0 && temp.item_isrecommend ==0 && !(isEmpty(temp.password))){
+                trs=trs+"<strong class='colorful' psw>LOCK</strong>";
+            }
+            trs=trs+"</td>";
 
 
-               //  投资进度
-               if(temp.item_status==1){
-                   trs=trs+"<td>"+"<strong class='countdown time' data-time='"+temp.syTime+"' data-item='"+temp.id+"'>";
-                   trs=trs+"<time class='hour'></time>";
-                   trs=trs+" &nbsp;:<time class='min'></time>";
-                   trs=trs+" &nbsp;:<time class='sec'></time>";
-                   trs=trs+"</strong></td>";
-               }else{
-                   trs=trs+"<td class='data-scale' data-val='"+temp.item_scale+"'></td>";
-               }
+            // 信用等级
+            trs=trs+"<td class='trust_range'>";
+            if(temp.total>90){
+                trs=trs+"A+";
+            }
+            if(temp.total>85 && temp.total<=90){
+                trs=trs+"A";
+            }
+            if(temp.total>75 && temp.total<=85){
+                trs=trs+"A-";
+            }
+            if(temp.total>65 && temp.total<=75){
+                trs=trs+"B";
+            }
+            trs=trs+"</td>";
 
-               // 操作项
-               trs=trs+"<td>";
-                 if(temp.item_status==1){
-                     trs=trs+"<p><a><input class='countdownButton' valid type='button' value='即将开标'></a></p>"
-                 }
-                 if(temp.item_status==10){
-                    trs=trs+"<p class='left_money'>可投金额"+temp.syAccount+"元</p><p><a ><input valid type='button' value='立即投资'></a></p>";
-                 }
-                if(temp.item_status==20){
-                    trs=trs+"<p><a><input not_valid  type='button' value='已抢完'></a></p>"
-                 }
-                if(temp.item_status==30 || temp.item_status==31){
-                    trs=trs+"<p><a ><input not_valid type='button' value='还款中'></a></p>";
-                }
-                if(temp.item_status==32){
-                    trs=trs+"<p><a  class='yihuankuan'><input not_valid type='button' value='已还款'></a></p>";
-                }
-                if(temp.item_status==23){
-                    trs=trs+"<p><a  ><input not_valid type='button' value='已满标'></a></p>";
-                }
-               trs=trs+"</td>";
+            // 担保机构
+            trs=trs+"<td><image src='/img/logo.png'></image></td>";
 
-             trs=trs+"</tr>";
+
+            //  投资进度
+            if(temp.item_status==1){
+                trs=trs+"<td>"+"<strong class='countdown time' data-time='"+temp.syTime+"' data-item='"+temp.id+"'>";
+                trs=trs+"<time class='hour'></time>";
+                trs=trs+" &nbsp;:<time class='min'></time>";
+                trs=trs+" &nbsp;:<time class='sec'></time>";
+                trs=trs+"</strong></td>";
+            }else{
+                trs=trs+"<td class='data-scale' data-val='"+temp.item_scale+"'></td>";
+            }
+
+            // 操作项
+            trs=trs+"<td>";
+            var href=ctx+"/item/details?itemId="+temp.id;
+            if(temp.item_status==1){
+                trs=trs+"<p><a href='"+href+"'><input class='countdownButton' valid type='button' value='即将开标'></a></p>"
+            }
+            if(temp.item_status==10){
+                trs=trs+"<p class='left_money'>可投金额"+temp.syAccount+"元</p><p><a href='"+href+"'><input valid type='button' value='立即投资'></a></p>";
+            }
+            if(temp.item_status==20){
+                trs=trs+"<p><a href='"+href+"'><input not_valid  type='button' value='已抢完'></a></p>"
+            }
+            if(temp.item_status==30 || temp.item_status==31){
+                trs=trs+"<p><a href='"+href+"'><input not_valid type='button' value='还款中'></a></p>";
+            }
+            if(temp.item_status==32){
+                trs=trs+"<p><a href='"+href+"' class='yihuankuan'><input not_valid type='button' value='已还款'></a></p>";
+            }
+            if(temp.item_status==23){
+                trs=trs+"<p><a href='"+href+"' ><input not_valid type='button' value='已满标'></a></p>";
+            }
+            trs=trs+"</td>";
+
+            trs=trs+"</tr>";
         }
         console.log(trs);
         // 拼接节点trs 到指定节点下
@@ -221,16 +222,16 @@ function initPageHtml(pages,currentPage) {
 
 function initItemData(itemType) {
     var itemCycle;
-     $(".tab").each(function () {
-         if($(this).hasClass("list_active")){
-             itemCycle=$(this).index();
-         }
-     });
+    $(".tab").each(function () {
+        if($(this).hasClass("list_active")){
+            itemCycle=$(this).index();
+        }
+    });
 
-     var isHistory=0;
-     if(itemCycle==4){
+    var isHistory=0;
+    if(itemCycle==4){
         isHistory=1;
-     }
+    }
     loadInvestListData(itemCycle,itemType,isHistory);
 
 }
@@ -259,7 +260,7 @@ function initItemScale() {
             barColor: 'orange',
             barWidth: 5,
             roundCorner : true,
-           // percentage: true,
+            // percentage: true,
             radius:40,
             format: '#%'
         });

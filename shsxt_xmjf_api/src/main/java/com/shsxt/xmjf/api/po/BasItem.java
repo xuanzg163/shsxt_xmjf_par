@@ -1,9 +1,11 @@
 package com.shsxt.xmjf.api.po;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BasItem {
+public class BasItem implements Serializable {
+    private static final long serialVersionUID = -7785293011681654708L;
     private Integer id;
 
     private Byte itemIsalive;

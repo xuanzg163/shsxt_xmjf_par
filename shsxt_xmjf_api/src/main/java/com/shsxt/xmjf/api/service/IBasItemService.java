@@ -1,6 +1,7 @@
 package com.shsxt.xmjf.api.service;
 
 import com.github.pagehelper.PageInfo;
+import com.shsxt.xmjf.api.po.BasItem;
 import com.shsxt.xmjf.api.querys.BasItemQuery;
 
 import java.util.Map;
@@ -24,4 +25,12 @@ public interface IBasItemService {
      * @param itemId
      */
     void updateBasItemStatusToOpen(Integer itemId);
+
+
+    /**
+     * 查询投资项目记录
+     * @param itemId 项目id
+     * @return
+     */
+    public BasItem queryBasItemByItemId(Integer itemId);
 }

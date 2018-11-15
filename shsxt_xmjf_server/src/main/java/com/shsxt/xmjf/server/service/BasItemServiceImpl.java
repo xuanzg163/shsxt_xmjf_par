@@ -74,8 +74,22 @@ public class BasItemServiceImpl implements IBasItemService {
         return new PageInfo<Map<String, Object>>(vals);
     }
 
+    /**
+     * 查询投资项目记录
+     * @param itemId 项目id
+     * @return
+     */
+    @Override
     public BasItem queryBasItemByItemId(Integer itemId) {
-        return basItemMapper.queryById(itemId);
+        String key="basItem::itemId::"+itemId;
+        BasItem basItem = (BasItem) valueOperations.get(key);
+        if (null == basItem){
+            basItem = basItemMapper.queryById(itemId);
+            if (null != basItem){
+                valueOperations.set(key,basItem);
+            }
+        }
+        return basItem;
     }
 
     @Override
