@@ -175,7 +175,6 @@
             <p class="no_account">没有账号？<a href="/register">立即注册</a></p>
         </div>
     </div>
-    <#--
     <div class="item_introduce">
         <div class="tab" id="tabs">
             <div  class="tab_active">借款详情</div>
@@ -212,83 +211,20 @@
                   </tr>
 
                   </tbody>
-                    &lt;#&ndash;
-                       type==2
-                    <thead>
-                    <tr><th colspan="2">借款人信息</th><th colspan="2">保障措施</th></tr>
-                    </thead>
-                    <tbody>
-                    <tr><td>借&nbsp;款&nbsp;方</td><td>${security.realname}</td><td>1</td><td>汽车经销商/汽车零配件加工企业收入</td></tr>
-                    <tr><td>注册资金</td><td>${carMall.registerCapital}</td><td>2</td><td>逾期抵（质）押物变现</td></tr>
-                    <tr><td>注册地址</td><td>${carMall.address}</td><td>3</td><td>第三方机构担保逾期全额赔付 </td></tr>
-                    <tr><td>法人</td><td>${carMall.juridicalPersonName}</td><td>4</td><td>第三方机构贷中监管</td></tr>
-                    <tr><td>身份证号</td><td>${carMall.juridicalPersonCard}</td><td>5</td><td>专业团队催收</td></tr>
-                    <tr><td>资金用途</td><td>${item.itemLoanUse}</td><td>6</td><td>第三方催收公司逾期债权收购</td></tr>
-                    </tbody>&ndash;&gt;
 
-                    &lt;#&ndash;
-                      type==1
-                    <thead>
-                    <tr><th colspan="2">借款人信息</th><th colspan="2">保障措施</th></tr>
-                    </thead>
-                    <tbody>
-                    <tr><td>姓&nbsp;&nbsp;&nbsp;&nbsp;名</td><td>${trainingInformation.name}</td><td>1</td><td>第三方合作机构担保</td></tr>
-                    <tr><td>学&nbsp;&nbsp;&nbsp;&nbsp;校</td><td>${trainingInformation.school}</td><td>2</td><td>借款信息真实、透明、公开</td></tr>
-                    <tr><td>年&nbsp;&nbsp;&nbsp;&nbsp;级</td><td>${trainingInformation.grade}</td><td>3</td><td>驾校承担监管责任</td></tr>
-                    <tr><td>借款金额</td><td>${item.itemAccount}</td><td>4</td><td>专款专用避免挪用</td></tr>
-                    <tr><td>培训驾校</td><td>${trainingInformation.drivingSchool}</td><td>5</td><td>专业团队催收</td></tr>
-                    <tr><td>资金用途</td><td>大学生驾校培训费</td><td>6</td><td>担保机构无条件垫付代偿</td></tr>
-                    </tbody>&ndash;&gt;
-                 &lt;#&ndash;
-                   type==5
-                 <thead>
-                  <tr><th colspan="2">借款人信息</th><th colspan="2">车辆信息</th></tr>
-                  </thead>
-
-                          <tbody>
-                          <tr><td>姓&nbsp;&nbsp;&nbsp;&nbsp;名</td><td>${security.realname!''}</td><td>车型</td><td>${itemLoan.carType!''}</td></tr>
-                          <tr><td>身份证号</td><td>${security.identifyCard!''}</td><td>上牌时间</td><td><#if itemLoan.licensingTime??>${itemLoan.licensingTime?string("yyyy-MM")}</#if></td></tr>
-                          <tr><td>居&nbsp;住&nbsp;地</td><td>${info.currentAddress!''}</td><td>公里数</td><td>${itemLoan.kilometers!'0'}万公里</td></tr>
-                          <tr><td>首付金额</td><td><#if itemLoan.firstPayAmount??>${itemLoan.firstPayAmount!''}元</#if></td><td>评估价</td><td><#if itemLoan.assessPrice??>${itemLoan.assessPrice?number}元</#if></td></tr>
-
-                      </tbody>&ndash;&gt;
-                    &lt;#&ndash;
-                      其他情况
-                    <thead>
-                    <tr><th colspan="2">借款人信息</th><th colspan="2">车辆信息</th></tr>
-                    </thead>
-                  <#if itemLoan??>
-                       <#if itemLoan.isNewCar=='0'>
-                        <tbody>
-                        <tr><td>姓&nbsp;&nbsp;&nbsp;&nbsp;名</td><td>${security.realname!''}</td><td>车型</td><td>${itemLoan.carType!''}</td></tr>
-                        <tr><td>身份证号</td><td>${security.identifyCard!''}</td><td>上牌时间</td><td><#if itemLoan.licensingTime??>${itemLoan.licensingTime?string("yyyy-MM")}</#if></td></tr>
-                        <tr><td>出&nbsp;生&nbsp;地</td><td>${info.birthAddress!''}</td><td>公里数</td><td>${itemLoan.kilometers!'0'}万公里</td></tr>
-                        <tr><td>居&nbsp;住&nbsp;地</td><td>${info.currentAddress!''}</td><td>评估价</td><td><#if itemLoan.assessPrice??>${itemLoan.assessPrice?number}元</#if></td></tr>
-                        </tbody>
-                        <#else>
-                            <tbody>
-                            <tr><td>姓&nbsp;&nbsp;&nbsp;&nbsp;名</td><td>${security.realname!''}</td><td>品牌</td><td>${itemLoan.carBrand!''}</td></tr>
-                            <tr><td>身份证号</td><td>${security.identifyCard!''}</td><td>车型</td><td>${itemLoan.carType!''}</td></tr>
-                            <tr><td>出&nbsp;生&nbsp;地</td><td>${info.birthAddress!''}</td><td>购买价格</td><td>${itemLoan.buyPrice!''}</td></tr>
-                            </tbody>
-                        </#if>&ndash;&gt;
                 </table>
             </div>
             <h3 class="title" id="anquanshenheType">安全审核</h3>
             <ul class="security_check clear">
                <if pics??>
                   <#list pics as pic>
-                        <#if pic.itemPictureType==1>
+                        <#if pic['type']==1>
                             <li style="background-image: url(/img/shenfenzheng.png)">身份证</li>
-                          <#elseif pic.itemPictureType==2>
+                          <#elseif pic['type']==2>
                               <li style="background-image: url(/img/xue.png)">学生证</li>
                         </#if>
                   </#list>
-
                </if>
-
-              &lt;#&ndash;  <li style="background-image: url(/img/cheng.png)">车城外观</li>
-                <li style="background-image: url(/img/cheng.png)">车城外观</li>&ndash;&gt;
 
 
             </ul>
@@ -310,10 +246,9 @@
                     <ul class="lunbo" id="slider">
                         <#if pics??>
                             <#list pics as pic>
-                                <li style="background-image: url(${pic.picturePath})" onclick="picTab()" data-url="${pic.picturePath}" ></li>
+                                <li style="background-image: url(${pic['url']})" onclick="picTab()" data-url="${pic['url']}" ></li>
                             </#list>
                         </#if>
-
                     </ul>
                 </div>
             </div>
@@ -353,13 +288,13 @@
                 <div class="pages">
                     <nav>
                         <ul id="pages" style="margin:84px auto" class="pagination">
-                            &lt;#&ndash;<li class="active"><a>1</a></li>&ndash;&gt;
+                            <#--<li class="active"><a>1</a></li>-->
                         </ul>
                     </nav>
                 </div>
-            </div>
+            </div style="display: none">
         </div>
-    </div>-->
+    </div>
 </div>
 
 

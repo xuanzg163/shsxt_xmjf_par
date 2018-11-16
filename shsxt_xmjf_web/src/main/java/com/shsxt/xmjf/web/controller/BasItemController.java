@@ -53,6 +53,12 @@ public class BasItemController extends BaseControl {
              */
             BusAccount busAccount=accountService.queryBusAccountByUserId(userModel.getUserId());
             model.addAttribute("account",busAccount);
+
+            /**
+             * 查询贷款人的基本信息
+             */
+            Integer loanUserId = basItem.getItemUserId();
+
         }
         return "details";
     }
