@@ -84,7 +84,7 @@ public class BasItemController extends BaseControl {
             //查询贷款人的车辆信息
             model.addAttribute("busItemLoan",busItemLoanService.queryBusItemLoanByItemId(basItem.getId()));
 
-            //获取
+            //获取安全审核的图片
             List<Map<String,Object>> pics = sysPictureService.querySysPicturesByItemId(itemId);
             model.addAttribute("pics",pics);
             return "details";

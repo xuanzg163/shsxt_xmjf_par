@@ -8,5 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 public interface BusItemInvestMapper extends BaseMapper<BusItemInvest> {
+    /**
+     * 查询投资记录
+     * @param itemInvestQuery
+     * @return
+     */
     public List<Map<String,Object>> queryInvestItemsByItemId(ItemInvestQuery itemInvestQuery);
 }

@@ -99,5 +99,6 @@
     <dubbo:reference interface="com.shsxt.xmjf.api.service.IBasUserSecurityService" id="basUserSecurityService"></dubbo:reference>
     <dubbo:reference interface="com.shsxt.xmjf.api.service.ISysPictureService" id="sysPictureService"></dubbo:reference>
     <dubbo:reference interface="com.shsxt.xmjf.api.service.IBusItemLoanService" id="busItemLoanService"></dubbo:reference>
+    <dubbo:reference interface="com.shsxt.xmjf.api.service.IBusItemInvestService" id="busItemInvestService"></dubbo:reference>
 
 </beans>

@@ -28,19 +28,18 @@
     <result column="auto_id" property="autoId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, item_id, user_id, invest_type, invest_current, invest_order, invest_status, invest_amount, 
-    invest_deal_amount, collect_amount, collect_principal, collect_interest, actual_collect_amount, 
-    actual_collect_principal, actual_collect_interest, actual_uncollect_amount, actual_uncollect_principal, 
-    actual_uncollect_interest, additional_rate_amount, addip, addtime, updatetime, special_marks, 
+    id, item_id, user_id, invest_type, invest_current, invest_order, invest_status, invest_amount,
+    invest_deal_amount, collect_amount, collect_principal, collect_interest, actual_collect_amount,
+    actual_collect_principal, actual_collect_interest, actual_uncollect_amount, actual_uncollect_principal,
+    actual_uncollect_interest, additional_rate_amount, addip, addtime, updatetime, special_marks,
     auto_id
   </sql>
   <select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from bus_item_invest
     where id = #{id,jdbcType=INTEGER}
   </select>
-
   <insert id="insert" parameterType="com.shsxt.xmjf.api.po.BusItemInvest" >
     insert into bus_item_invest
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -192,7 +191,6 @@
       </if>
     </trim>
   </insert>
-
   <update id="update" parameterType="com.shsxt.xmjf.api.po.BusItemInvest" >
     update bus_item_invest
     <set >
@@ -268,9 +266,10 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  
+
+  <!--查询投资记录-->
   <select id="queryInvestItemsByItemId" parameterType="com.shsxt.xmjf.api.querys.ItemInvestQuery" resultType="map">
-     select
+      select
         b.mobile,
         bi.invest_deal_amount as amount,
         DATE_FORMAT(bi.addtime,"%Y-%m-%d %H:%i:%s") as time
