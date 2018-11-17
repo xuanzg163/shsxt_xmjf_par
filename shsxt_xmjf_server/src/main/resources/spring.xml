@@ -145,6 +145,13 @@
 
     <dubbo:service interface="com.shsxt.xmjf.api.service.IAccountService" ref="busAccountServiceImpl"></dubbo:service>
 
+    <dubbo:service interface="com.shsxt.xmjf.api.service.IBasUserSecurityService" ref="basUserSecurityServiceImpl"></dubbo:service>
+
+    <dubbo:service interface="com.shsxt.xmjf.api.service.IBusItemLoanService" ref="busItemLoanServiceImpl"></dubbo:service>
+
+    <dubbo:service interface="com.shsxt.xmjf.api.service.ISysPictureService" ref="sysPictureServiceImpl"></dubbo:service>
+
+    <dubbo:service interface="com.shsxt.xmjf.api.service.IBusItemInvestService" ref="busItemInvestServiceImpl"></dubbo:service>
 
 
 

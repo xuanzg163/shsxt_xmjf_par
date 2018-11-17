@@ -15,11 +15,11 @@
     <result column="verify_time" property="verifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_id, payment_password, pattern_lock, realname, identify_card, phone_status, 
+    id, user_id, payment_password, pattern_lock, realname, identify_card, phone_status,
     email_status, realname_status, email, verify_time
   </sql>
   <select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from bas_user_security
     where id = #{id,jdbcType=INTEGER}
@@ -98,7 +98,6 @@
       </if>
     </trim>
   </insert>
-
   <update id="update" parameterType="com.shsxt.xmjf.api.po.BasUserSecurity" >
     update bas_user_security
     <set >
@@ -136,4 +135,10 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <!--查询用户安全信息-->
+  <select id="queryBasUserSecurityByUserId" parameterType="int" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from bas_user_security
+    where user_id=#{userId}
+  </select>
 </mapper>
