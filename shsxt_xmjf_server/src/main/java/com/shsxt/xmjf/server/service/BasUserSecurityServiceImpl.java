@@ -27,4 +27,14 @@ public class BasUserSecurityServiceImpl implements IBasUserSecurityService {
     public BasUserSecurity queryBasUserSecurityByUserId(Integer userId) {
         return basUserSecurityMapper.queryBasUserSecurityByUserId(userId);
     }
+
+    /**
+     * 更新用户认证信息
+     * @param basUserSecurity
+     * @return
+     */
+    @Override
+    public int updateBasUserSecurity(BasUserSecurity basUserSecurity) {
+        return basUserSecurityMapper.update(basUserSecurity);
+    }
 }

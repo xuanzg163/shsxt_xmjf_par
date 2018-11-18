@@ -62,6 +62,13 @@ public class XmjfConstant {
     public static final String SMS_LOGIN_CODE="SMS_150736683";
     public static final String SMS_REGISTER_SUCCESS_NOTIFY_CODE="SMS_150742429";
 
+    /**
+     * 配置实名认常量参数
+     */
+    public static final String SM_HOST= "https://1.api.apistore.cn";
+    public static final String SM_PATH="/idcard3";
+    public static final String SM_REQUEST_TYPE="POST";
+    public static final String SM_CODE="a386f386635c4dc89638459e09469710";
 
 
 }

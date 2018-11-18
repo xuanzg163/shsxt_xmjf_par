@@ -2,17 +2,21 @@ package com.shsxt.xmjf.server.service;
 
 
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.shsxt.xmjf.api.constants.XmjfConstant;
+import com.shsxt.xmjf.api.exceptions.BusiException;
+import com.shsxt.xmjf.api.model.ResultInfo;
 import com.shsxt.xmjf.api.model.UserModel;
 import com.shsxt.xmjf.api.po.*;
+import com.shsxt.xmjf.api.service.IBasUserSecurityService;
 import com.shsxt.xmjf.api.service.ISmsService;
 import com.shsxt.xmjf.api.service.IUserService;
-import com.shsxt.xmjf.api.utils.AssertUtil;
-import com.shsxt.xmjf.api.utils.MD5;
-import com.shsxt.xmjf.api.utils.PhoneUtil;
-import com.shsxt.xmjf.api.utils.RandomCodesUtils;
+import com.shsxt.xmjf.api.utils.*;
 import com.shsxt.xmjf.server.db.dao.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -21,6 +25,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -63,6 +69,9 @@ public class UserServiceImpl implements IUserService {
 
     @Resource
     private RedisTemplate<String,Object> redisTemplate;
+
+    @Resource
+    private IBasUserSecurityService basUserSecurityService;
 
 
     /**
@@ -246,6 +255,89 @@ public class UserServiceImpl implements IUserService {
          *        2000-2500   设置      1个月
          */
         return userModel;
+    }
+
+    /**
+     * 更新用户认证信息
+     * @param realName
+     * @param cardNo
+     * @param userId
+     * @param busiPassword 交易密码
+     * @return
+     */
+    @Override
+    public ResultInfo updateBasUserSecurityInfo(String realName, String cardNo, Integer userId, String busiPassword) {
+        ResultInfo resultInfo = new ResultInfo();
+
+        try {
+            //参数验证
+            checkParamsRealInfo(realName,cardNo,busiPassword);
+
+            //调用第三方接口
+            doAuth(realName,cardNo);
+
+            //更新用户信息安全表
+            BasUserSecurity basUserSecurity = basUserSecurityService.queryBasUserSecurityByUserId(userId);
+            basUserSecurity.setIdentifyCard(cardNo);
+            basUserSecurity.setRealname(realName);
+            basUserSecurity.setRealnameStatus(1);
+            basUserSecurity.setVerifyTime(new Date());
+            basUserSecurity.setPaymentPassword(MD5.toMD5(busiPassword));
+
+            AssertUtil.isTrue(basUserSecurityService.updateBasUserSecurity(basUserSecurity) < 1,
+                    XmjfConstant.OPS_FAILED_MSG);
+
+        } catch (BusiException e) {
+            e.printStackTrace();
+            resultInfo.setCode(e.getCode());
+            resultInfo.setMsg(e.getMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultInfo.setCode(XmjfConstant.OPS_FAILED_CODE);
+            resultInfo.setMsg("认证未通过!");
+        }
+        return resultInfo;
+    }
+
+    /**
+     * 第三方身份证认证接口
+     * @param realName
+     * @param cardNo
+     */
+    private void doAuth(String realName, String cardNo) throws Exception {
+        String host = XmjfConstant.SM_HOST;
+        String path = XmjfConstant.SM_PATH;
+        String method = XmjfConstant.SM_REQUEST_TYPE;
+        String appcode = XmjfConstant.SM_CODE;
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Authorization", "APPCODE " + appcode);
+        //根据API的要求，定义相对应的Content-Type
+        headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        Map<String, String> querys = new HashMap<String, String>();
+        Map<String, String> bodys = new HashMap<String, String>();
+        bodys.put("cardNo", cardNo);
+        bodys.put("realName", realName);
+        HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+        System.out.println(response.toString());
+
+        //转换认证信息为JsonOBJ
+        JSONObject jsonObject=JSON.parseObject(EntityUtils.toString(response.getEntity()));
+        AssertUtil.isTrue(jsonObject.getInteger("error_code")!=0,jsonObject.getString("reason"));
+
+    }
+
+    /**
+     * 用户认证参数校验
+     * @param realName
+     * @param cardNo
+     * @param busiPassword
+     */
+    private void checkParamsRealInfo(String realName, String cardNo, String busiPassword) {
+    AssertUtil.isTrue(StringUtils.isBlank(realName),"请输入真实姓名");
+    AssertUtil.isTrue(StringUtils.isBlank(cardNo),"请输入身份证号");
+    AssertUtil.isTrue(cardNo.length() != 18,"身份证号长度不合法");
+    AssertUtil.isTrue(StringUtils.isBlank(busiPassword),"请输入交易密码");
+
     }
 
     /**

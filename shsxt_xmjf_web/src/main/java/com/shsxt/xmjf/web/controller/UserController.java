@@ -106,5 +106,20 @@ public class UserController {
         response.sendRedirect("/login");
     }
 
+    /**
+     * 用户身份认证
+     * @param realName 真实姓名
+     * @param cardNo 身份证号
+     * @param busiPassword 交易密码
+     * @param session
+     * @return
+     */
+    @RequestMapping("user/auth")
+    @ResponseBody
+    @RequireLogin
+    public ResultInfo userAuth(String realName, String cardNo,String busiPassword,HttpSession session){
+        UserModel userModel = (UserModel) session.getAttribute(XmjfConstant.SESSION_USER);
+        return userService.updateBasUserSecurityInfo(realName,cardNo,userModel.getUserId(),busiPassword);
+    }
 
 }

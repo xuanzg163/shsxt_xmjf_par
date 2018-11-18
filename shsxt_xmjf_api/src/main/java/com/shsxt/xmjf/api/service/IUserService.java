@@ -1,6 +1,7 @@
 package com.shsxt.xmjf.api.service;
 
 
+import com.shsxt.xmjf.api.model.ResultInfo;
 import com.shsxt.xmjf.api.model.UserModel;
 import com.shsxt.xmjf.api.po.BasUser;
 import com.shsxt.xmjf.api.po.User;
@@ -34,6 +35,16 @@ public interface IUserService {
      * @return
      */
     public UserModel quickLogin(String phone,String code);
+
+    /**
+     * 更新用户认证信息
+     * @param realName
+     * @param cardNo
+     * @param userId
+     * @param busiPassword 交易密码
+     * @return
+     */
+    public ResultInfo updateBasUserSecurityInfo(String realName, String cardNo, Integer userId,String busiPassword);
 
 
 }
