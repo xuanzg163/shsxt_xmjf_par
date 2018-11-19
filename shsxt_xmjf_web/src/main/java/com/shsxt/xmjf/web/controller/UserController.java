@@ -26,7 +26,7 @@ import java.io.IOException;
  */
 
 @Controller
-public class UserController {
+public class UserController extends BaseControl{
 
     @Resource
     private IUserService userService;
