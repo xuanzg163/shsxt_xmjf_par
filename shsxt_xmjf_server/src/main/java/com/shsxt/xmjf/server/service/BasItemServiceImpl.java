@@ -85,7 +85,10 @@ public class BasItemServiceImpl implements IBasItemService {
     @Override
     public BasItem queryBasItemByItemId(Integer itemId) {
         String key = "basItem::itemId::" + itemId;
+
+        //获取缓存中的数据
         BasItem basItem = (BasItem) valueOperations.get(key);
+
         /**
          * 双重检查锁，解决缓存穿透
          */
