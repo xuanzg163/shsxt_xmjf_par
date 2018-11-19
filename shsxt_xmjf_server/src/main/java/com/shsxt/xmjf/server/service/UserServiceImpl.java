@@ -273,11 +273,13 @@ public class UserServiceImpl implements IUserService {
             //参数验证
             checkParamsRealInfo(realName,cardNo,busiPassword);
 
+            BasUserSecurity basUserSecurity = basUserSecurityService.queryBasUserSecurityByUserId(userId);
+            AssertUtil.isTrue(basUserSecurity.getRealnameStatus() == 1 ,"当前用户已实名");
+
             //调用第三方接口
             doAuth(realName,cardNo);
 
             //更新用户信息安全表
-            BasUserSecurity basUserSecurity = basUserSecurityService.queryBasUserSecurityByUserId(userId);
             basUserSecurity.setIdentifyCard(cardNo);
             basUserSecurity.setRealname(realName);
             basUserSecurity.setRealnameStatus(1);
@@ -295,6 +297,22 @@ public class UserServiceImpl implements IUserService {
             e.printStackTrace();
             resultInfo.setCode(XmjfConstant.OPS_FAILED_CODE);
             resultInfo.setMsg("认证未通过!");
+        }
+        return resultInfo;
+    }
+
+    /**
+     * 检查用户实名认证状态
+     * @param userId
+     * @return
+     */
+    @Override
+    public ResultInfo checkRealNameStatus(Integer userId) {
+        BasUserSecurity basUserSecurity = basUserSecurityService.queryBasUserSecurityByUserId(userId);
+        ResultInfo resultInfo = new ResultInfo("已实名");
+        if (basUserSecurity.getRealnameStatus() != 1){
+            resultInfo.setCode(XmjfConstant.OPS_FAILED_CODE);
+            resultInfo.setMsg("用户未实名");
         }
         return resultInfo;
     }

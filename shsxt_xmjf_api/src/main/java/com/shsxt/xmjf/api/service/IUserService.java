@@ -46,5 +46,11 @@ public interface IUserService {
      */
     public ResultInfo updateBasUserSecurityInfo(String realName, String cardNo, Integer userId,String busiPassword);
 
+    /**
+     * 检查用户实名认证状态
+     * @param userId
+     * @return
+     */
+    public ResultInfo checkRealNameStatus(Integer userId);
 
 }

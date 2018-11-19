@@ -122,4 +122,30 @@ public class UserController {
         return userService.updateBasUserSecurityInfo(realName,cardNo,userModel.getUserId(),busiPassword);
     }
 
+
+    /**
+     * 检查用户实名认证状态
+     * @param session
+     * @return
+     */
+    @RequestMapping("user/checkRealNameStatus")
+    @RequireLogin
+    @ResponseBody
+    public ResultInfo checkRealNameStatus(HttpSession session) {
+        UserModel userModel = (UserModel) session.getAttribute(XmjfConstant.SESSION_USER);
+        return userService.checkRealNameStatus(userModel.getUserId());
+    }
+
+
+
+    /**
+     * 校验用户是否认证
+     * @return
+     */
+    @RequestMapping("auth")
+    @RequireLogin
+    public String toAuth() {
+        return "auth";
+    }
+
 }

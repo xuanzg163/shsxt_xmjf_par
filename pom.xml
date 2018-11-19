@@ -194,9 +194,8 @@
             <artifactId>dubbo</artifactId>
             <version>2.5.6</version>
         </dependency>
-        <!--
-           zookeeper 配置
-        -->
+
+        <!--zookeeper 配置-->
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
@@ -219,6 +218,13 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
             <version>4.2.1</version>
+        </dependency>
+
+        <!--alipay支付宝依赖-->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>3.4.27.ALL</version>
         </dependency>
     </dependencies>
 

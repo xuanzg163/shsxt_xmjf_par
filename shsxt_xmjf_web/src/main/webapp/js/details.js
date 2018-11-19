@@ -31,6 +31,12 @@ $(function () {
 
 });
 
+/**
+ * 切换Tab
+ * @param ele
+ * @param allNum
+ * @param currentNum
+ */
 function picTab(ele,allNum,currentNum) {
     var ele=$('#imgLarge');
     var allNum=$('#slider').find('li');
@@ -61,5 +67,28 @@ function picTab(ele,allNum,currentNum) {
         }
         var ImgSrc = allNum.eq(currentNum).attr('data-url');
         ele.css('background-image', 'url('+ImgSrc+')');
+    })
+}
+
+/**
+ * 充值页面
+ */
+function toRecharge() {
+
+    $.ajax({
+        type:"get",
+        url:ctx+"/user/checkRealNameStatus",
+        dataType:"json",
+        success:function (data) {
+            if(data.code==200){
+                window.location.href=ctx+"/account/recharge";
+            }else{
+                layer.confirm('当前用户未实名,执行实名认证?', {
+                    btn: ['实名认证','稍后认证'] //按钮
+                }, function(){
+                    window.location.href=ctx+"/auth";
+                });
+            }
+        }
     })
 }
