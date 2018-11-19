@@ -153,6 +153,8 @@
 
     <dubbo:service interface="com.shsxt.xmjf.api.service.IBusItemInvestService" ref="busItemInvestServiceImpl"></dubbo:service>
 
+    <dubbo:service interface="com.shsxt.xmjf.api.service.IBusAccountRechargeService" ref="busAccountRechargeServiceImpl"></dubbo:service>
+
 
 
 </beans>

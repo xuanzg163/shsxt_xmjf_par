@@ -4,9 +4,19 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.shsxt.xmjf.api.constants.AlipayConfig;
+import com.shsxt.xmjf.api.constants.XmjfConstant;
+import com.shsxt.xmjf.api.exceptions.BusiException;
+import com.shsxt.xmjf.api.model.UserModel;
+import com.shsxt.xmjf.api.service.IBusAccountRechargeService;
+import com.shsxt.xmjf.api.utils.AssertUtil;
+import com.shsxt.xmjf.web.aop.annotations.RequireLogin;
+import com.shsxt.xmjf.web.controller.BaseControl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 
@@ -17,48 +27,42 @@ import java.math.BigDecimal;
  */
 @Controller
 @RequestMapping("alipay")
-public class AlipayController {
+public class AlipayController extends BaseControl {
+
+
+    @Resource
+    private IBusAccountRechargeService busAccountRechargeService;
 
     /**
-     *  用户充值
+     * 用户充值
      * @param amount 充值金额
+     * @param busiPassword 交易密码
+     * @param imageCode 图片验证码
      * @param request
      * @return
      */
     @RequestMapping("doRecharge")
-    public String doRecharge(BigDecimal amount, HttpServletRequest request) {
-
-        //获得初始化的AlipayClient
-        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);
-
-        //设置请求参数
-        AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
-        alipayRequest.setReturnUrl(AlipayConfig.return_url);
-        alipayRequest.setNotifyUrl(AlipayConfig.notify_url);
-
-        //商户订单号，订单号码唯一，必填
-        String out_trade_no = System.currentTimeMillis()+"";
-
-        //订单名称
-        String subject = "用户充值";
-
-        //商品描述
-        String body = "用户充值";
-
-        alipayRequest.setBizContent("{\"out_trade_no\":\""+ out_trade_no +"\","
-                + "\"total_amount\":\""+ amount +"\","
-                + "\"subject\":\""+ subject +"\","
-                + "\"body\":\""+ body +"\","
-                + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
+    @RequireLogin
+    public String doRecharge(BigDecimal amount,String busiPassword,String imageCode,HttpServletRequest request) {
+        UserModel userModel= (UserModel) request.getSession().getAttribute(XmjfConstant.SESSION_USER);
 
         try {
-            String result = alipayClient.pageExecute(alipayRequest).getBody();
+            AssertUtil.isTrue(StringUtils.isBlank(imageCode),"请输入图片验证码!");
+            String sessionImageCode= (String) request.getSession().getAttribute(XmjfConstant.SESSION_IMAGE);
+            AssertUtil.isTrue(StringUtils.isBlank(sessionImageCode),"当前页面已失效,请重新刷新页面!");
+            AssertUtil.isTrue(!(imageCode.equals(sessionImageCode)),"图片验证码不正确!");
+            request.getSession().removeAttribute(XmjfConstant.SESSION_IMAGE);
+            String result= busAccountRechargeService.addBusAccountRecharge(userModel.getUserId(),amount,busiPassword);
             request.setAttribute("result",result);
-        } catch (AlipayApiException e) {
+        } catch (BusiException e) {
             e.printStackTrace();
+            request.setAttribute("msg",e.getMsg());
+            return "recharge";
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("msg",XmjfConstant.OPS_FAILED_MSG);
+            return "recharge";
         }
-
-        //视图，用作表单提交
         return "result";
     }
 }

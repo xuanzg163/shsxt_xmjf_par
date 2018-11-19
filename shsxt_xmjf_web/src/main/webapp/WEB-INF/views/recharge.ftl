@@ -48,7 +48,7 @@
                     <div class="third-pay-title">
                         验证码：
                     </div>
-                    <input type="text" class="recharge-input" name="picCode" id="pictureCode"
+                    <input type="text" class="recharge-input" name="imageCode" id="pictureCode"
                            style="margin-top: 18px;margin-left: 10px;float: left"/>
 
                     <div class="verification-img">
@@ -59,7 +59,7 @@
                     <div class="third-pay-title">
                         交易密码：
                     </div>
-                    <input type="password" name="password" class="recharge-input" id="password"
+                    <input type="password" name="busiPassword" class="recharge-input" id="password"
                            style="margin-top: 18px;margin-left: 10px;float: left"/>
                 </div>
                 <div class="third-pay">

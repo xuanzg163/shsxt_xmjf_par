@@ -45,7 +45,9 @@
         <table tableName="bus_user_security" domainObjectName="BasUserSecurity" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
         <table tableName="bus_item_loan" domainObjectName="BusItemLoan" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
         <table tableName="sys_picture" domainObjectName="SysPicture" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="bus_account_recharge" domainObjectName="BusAccountRecharge" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
     -->
+
 
     </context>
 </generatorConfiguration>

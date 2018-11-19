@@ -100,5 +100,6 @@
     <dubbo:reference interface="com.shsxt.xmjf.api.service.ISysPictureService" id="sysPictureService"></dubbo:reference>
     <dubbo:reference interface="com.shsxt.xmjf.api.service.IBusItemLoanService" id="busItemLoanService"></dubbo:reference>
     <dubbo:reference interface="com.shsxt.xmjf.api.service.IBusItemInvestService" id="busItemInvestService"></dubbo:reference>
+    <dubbo:reference interface="com.shsxt.xmjf.api.service.IBusAccountRechargeService" id="busAccountRechargeService" timeout="30000"></dubbo:reference>
 
 </beans>
