@@ -57,6 +57,8 @@ public class AlipayController {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+
+        //视图，用作表单提交
         return "result";
     }
 }
