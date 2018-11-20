@@ -43,8 +43,15 @@ public class AccountController extends BaseControl {
     }
 
     /**
-     * 支付宝同步回调
-     * 通知
+     * 支付宝同步回调通知
+     *
+     * @param orderNo
+     * @param totalAmount
+     * @param sellerId
+     * @param busiNo
+     * @param appId
+     * @param request
+     * @return
      */
     @RequestMapping("returnUrl")
     public String returnCallback(@RequestParam(name = "out_trade_no") String orderNo,
@@ -74,10 +81,40 @@ public class AccountController extends BaseControl {
 
     /**
      * 支付宝异步回调通知
+     *
+     * @param orderNo
+     * @param totalAmount
+     * @param sellerId
+     * @param busiNo
+     * @param appId
+     * @param tradeStatus
+     * @param request
+     * @return
      */
     @RequestMapping("notifyUrl")
-    public void notifyCallback(HttpServletRequest request) {
-        System.out.println("异步回调通知...");
+    public String notifyCallback(@RequestParam(name = "out_trade_no") String orderNo,
+                                 @RequestParam(name = "total_amount") BigDecimal totalAmount,
+                                 @RequestParam(name = "seller_id") String sellerId,
+                                 @RequestParam(name = "trade_no") String busiNo,
+                                 @RequestParam(name = "app_id") String appId,
+                                 @RequestParam(name = "trade_status") String tradeStatus,
+                                 HttpServletRequest request) {
+        /**
+         * 页面输出 success | fail
+         */
+        try {
+            Boolean flag = checkSign(request);
+            AssertUtil.isTrue(!flag, "订单支付异常,请联系客服!");
+
+            if (tradeStatus.equals(AlipayConfig.trade_status)) {
+                busAccountRechargeService.updateBusAccountRechargeInfo(orderNo, totalAmount, sellerId, appId, busiNo);
+                request.setAttribute("msg", "success");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("msg", "fail");
+        }
+        return "notify";
     }
 
     /**
