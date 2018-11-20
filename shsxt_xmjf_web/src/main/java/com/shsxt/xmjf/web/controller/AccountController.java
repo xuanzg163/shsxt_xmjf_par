@@ -118,6 +118,16 @@ public class AccountController extends BaseControl {
     }
 
     /**
+     * 充值记录展示页面
+     * @return
+     */
+    @RequestMapping("rechargeRecord")
+    public  String rechargeRecord(){
+        return "recharge_record";
+    }
+
+
+    /**
      * 验签
      *
      * @param request
