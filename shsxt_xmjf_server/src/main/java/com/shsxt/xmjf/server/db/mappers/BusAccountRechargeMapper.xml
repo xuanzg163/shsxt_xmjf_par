@@ -178,4 +178,10 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <!--更新用户充值记录-->
+  <select id="queryBusAccountRechargeByOrderNo" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from bus_account_recharge
+    where order_no=#{orderNo}
+  </select>
 </mapper>

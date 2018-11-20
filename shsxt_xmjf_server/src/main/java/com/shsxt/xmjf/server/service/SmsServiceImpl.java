@@ -69,7 +69,10 @@ public class SmsServiceImpl implements ISmsService {
             doSendSms(phone,XmjfConstant.SMS_LOGIN_CODE,code);
         }else if(type==XmjfConstant.SMS_REGISTER_SUCCESS_NOTIFY_TYPE){
             doSendSms(phone,XmjfConstant.SMS_REGISTER_SUCCESS_NOTIFY_CODE,code);
-        }else{
+        }else if(type==XmjfConstant.SMS_RECHARGE_SUCCESS_NOTIFY_TYPE){
+            doSendSms(phone,XmjfConstant.SMS_RECHARGE_SUCCESS_NOTIFY_CODE,phone);
+        }
+        else{
             System.out.println("类型不合法!!!");
             return;
         }
@@ -128,5 +131,12 @@ public class SmsServiceImpl implements ISmsService {
                                 || type == XmjfConstant.SMS_REGISTER_TYPE
                                 || type == XmjfConstant.SMS_REGISTER_SUCCESS_NOTIFY_TYPE),
                 "短信类型不合法!");
+
+        AssertUtil.isTrue(null==type||
+                !(type== XmjfConstant.SMS_LOGIN_TYPE
+                        ||type==XmjfConstant.SMS_REGISTER_TYPE
+                        ||type==XmjfConstant.SMS_REGISTER_SUCCESS_NOTIFY_TYPE
+                        ||type==XmjfConstant.SMS_RECHARGE_SUCCESS_NOTIFY_TYPE),"短信类型不合法!");
+
     }
 }

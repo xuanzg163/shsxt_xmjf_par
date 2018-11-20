@@ -18,4 +18,18 @@ public interface IBusAccountRechargeService {
      * @return
      */
     public String addBusAccountRecharge(Integer userId, BigDecimal amount,String busiPassword);
+
+    /**
+     * 更新充值记录
+     * @param orderNo
+     * @param amount
+     * @param sellerId
+     * @param appId
+     * @param busiNo
+     */
+    public void updateBusAccountRechargeInfo(String orderNo
+            ,BigDecimal amount
+            ,String sellerId
+            ,String appId
+            ,String busiNo);
 }

@@ -317,6 +317,17 @@ public class UserServiceImpl implements IUserService {
         return resultInfo;
     }
 
+
+    /**
+     * 查询用户信息
+     * @param userId
+     * @return
+     */
+    @Override
+    public BasUser queryBasUserByUserId(Integer userId) {
+        return basUserMapper.queryById(userId);
+    }
+
     /**
      * 第三方身份证认证接口
      * @param realName

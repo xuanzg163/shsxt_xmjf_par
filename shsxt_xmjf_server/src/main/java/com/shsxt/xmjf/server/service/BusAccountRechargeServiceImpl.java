@@ -9,14 +9,15 @@ import com.shsxt.xmjf.api.constants.AlipayConfig;
 import com.shsxt.xmjf.api.constants.XmjfConstant;
 import com.shsxt.xmjf.api.enums.OrderStatus;
 import com.shsxt.xmjf.api.enums.RechaggeType;
-import com.shsxt.xmjf.api.po.BasUserSecurity;
-import com.shsxt.xmjf.api.po.BusAccountRecharge;
+import com.shsxt.xmjf.api.po.*;
 import com.shsxt.xmjf.api.service.IBasUserSecurityService;
 import com.shsxt.xmjf.api.service.IBusAccountRechargeService;
+import com.shsxt.xmjf.api.service.ISmsService;
+import com.shsxt.xmjf.api.service.IUserService;
 import com.shsxt.xmjf.api.utils.AssertUtil;
 import com.shsxt.xmjf.api.utils.MD5;
 import com.shsxt.xmjf.api.utils.RandomCodesUtils;
-import com.shsxt.xmjf.server.db.dao.BusAccountRechargeMapper;
+import com.shsxt.xmjf.server.db.dao.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,29 @@ public class BusAccountRechargeServiceImpl implements IBusAccountRechargeService
 
     @Resource
     private BusAccountRechargeMapper busAccountRechargeMapper;
+
+    @Resource
+    private BusAccountMapper busAccountMapper;
+
+    @Resource
+    private BusAccountLogMapper busAccountLogMapper;
+
+
+    @Resource
+    private BusUserStatMapper busUserStatMapper;
+
+    @Resource
+    private BusUserIntegralMapper busUserIntegralMapper;
+
+    @Resource
+    private BusIntegralLogMapper busIntegralLogMapper;
+
+    @Resource
+    private ISmsService smsService;
+
+    @Resource
+    private IUserService userService;
+
 
     /**
      * 用户充值
@@ -102,6 +126,109 @@ public class BusAccountRechargeServiceImpl implements IBusAccountRechargeService
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * 更新用户充值记录
+     *
+     * @param orderNo
+     * @param amount
+     * @param sellerId
+     * @param appId
+     * @param busiNo
+     */
+    @Override
+    public void updateBusAccountRechargeInfo(String orderNo, BigDecimal amount, String sellerId, String appId, String busiNo) {
+        /**
+         *  1.收集get(同步)|post(异步) 请求参数并进行处理
+         *  2.检验签名串是否正确(防止中间人攻击)
+         *  3.校验 订单号  app_id  sell_id  amount  是否合法
+         *  4.判断订单是否已支付
+         *      已支付-->方法结束(正常结束)
+         *      未支付-->执行更新操作
+         *  5.订单业务更新逻辑处理
+         *        更新bus_account_recharge 订单记录表
+         *        更新bus_account   账户表
+         *        添加账户变动日志信息 bus_account_log
+         *        更新用户统计表信息 bus_user_stat
+         *        积分表信息更新操作 bus_user_integral
+         *        添加用户积分日志记录 bus_integral_log
+         *  6.用户充值成功 发送短信通知
+         *      userId-->phone
+         */
+
+        BusAccountRecharge busAccountRecharge = busAccountRechargeMapper.queryBusAccountRechargeByOrderNo(orderNo);
+
+        //参数校验
+        AssertUtil.isTrue(StringUtils.isBlank(orderNo) || null == busAccountRecharge, "订单不存在,请联系客服!");
+        AssertUtil.isTrue(StringUtils.isBlank(busiNo), "订单异常,请联系客服!");
+        AssertUtil.isTrue(null == amount || amount.compareTo(BigDecimal.ZERO) <= 0
+                || (amount.compareTo(busAccountRecharge.getRechargeAmount()) != 0), "订单金额异常,请联系客服!");
+        AssertUtil.isTrue(StringUtils.isBlank(sellerId)
+                || StringUtils.isBlank(appId) || !(AlipayConfig.seller_id.equals(sellerId))
+                || !(AlipayConfig.app_id.equals(appId)), "商家信息异常!");
+
+        if (busAccountRecharge.getStatus().equals(OrderStatus.PAY_SUCCESS.getStatus())) {
+            //订单支付
+            return;
+        }
+
+        //设置订单支付状态，订单已支付
+        busAccountRecharge.setStatus(OrderStatus.PAY_SUCCESS.getStatus());
+        busAccountRecharge.setActualAmount(amount);
+        busAccountRecharge.setAuditTime(new Date());
+        busAccountRecharge.setBusiNo(busiNo);
+        AssertUtil.isTrue(busAccountRechargeMapper.update(busAccountRecharge) < 1, XmjfConstant.OPS_FAILED_MSG);
+
+        //更新账户记录信息
+        BusAccount busAccount = busAccountMapper.queryBusAccountByUserId(busAccountRecharge.getUserId());
+        busAccount.setTotal(busAccount.getTotal().add(amount));
+        busAccount.setCash(busAccount.getCash().add(amount));
+        busAccount.setUsable(busAccount.getUsable().add(amount));
+        AssertUtil.isTrue(busAccountMapper.update(busAccount) < 1, XmjfConstant.OPS_FAILED_MSG);
+
+        //添加账户变动日志
+        BusAccountLog busAccountLog = new BusAccountLog();
+        busAccountLog.setUsable(busAccount.getUsable());
+        busAccountLog.setUserId(busAccountRecharge.getUserId());
+        busAccountLog.setTotal(busAccount.getTotal());
+        busAccountLog.setOperType("user_recharge");
+        // 收入
+        busAccountLog.setBudgetType(1);
+        busAccountLog.setRepay(busAccount.getRepay());
+        busAccountLog.setRemark("用户充值操作");
+        busAccountLog.setOperMoney(amount);
+        busAccountLog.setFrozen(busAccount.getFrozen());
+        busAccountLog.setAddtime(new Date());
+        busAccountLog.setCash(busAccount.getCash());
+        busAccountLog.setWait(busAccount.getWait());
+        AssertUtil.isTrue(busAccountLogMapper.insert(busAccountLog) < 1, XmjfConstant.OPS_FAILED_MSG);
+
+        // 更新用户统计信息
+        BusUserStat busUserStat=busUserStatMapper.queryBusUserStatByUserId(busAccountRecharge.getUserId());
+        busUserStat.setInvestCount(busUserStat.getInvestCount()+1);
+        busUserStat.setInvestAmount(busUserStat.getInvestAmount().add(amount));
+        AssertUtil.isTrue(busUserStatMapper.update(busUserStat)<1,XmjfConstant.OPS_FAILED_MSG);
+
+        // 更新用户积分
+        BusUserIntegral busUserIntegral=busUserIntegralMapper.queryBusUserIntegralByUserId(busAccountRecharge.getUserId());
+        busUserIntegral.setTotal(busUserIntegral.getTotal()+100);
+        busUserIntegral.setUsable(busUserIntegral.getUsable()+100);
+        AssertUtil.isTrue(busUserIntegralMapper.update(busUserIntegral)<1,XmjfConstant.OPS_FAILED_MSG);
+
+        // 添加积分变动日志信息
+        BusIntegralLog busIntegralLog=new BusIntegralLog();
+        busIntegralLog.setAddtime(new Date());
+        busIntegralLog.setIntegral(100);
+        busIntegralLog.setStatus(0);
+        busIntegralLog.setUserId(busAccountRecharge.getUserId());
+        busIntegralLog.setWay("用户充值");
+        AssertUtil.isTrue(busIntegralLogMapper.insert(busIntegralLog)<1,XmjfConstant.OPS_FAILED_MSG);
+
+        // 发送手机短信
+        /*BasUser basUser=userService.queryBasUserByUserId(busAccountRecharge.getUserId());
+        smsService.sendSms(basUser.getMobile(),XmjfConstant.SMS_REGISTER_SUCCESS_NOTIFY_TYPE);
+*/
     }
 
     /**

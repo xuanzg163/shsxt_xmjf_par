@@ -21,10 +21,10 @@ public class AlipayConfig {
     public static String alipay_public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3szKwPVJu0hqq/aVBmyo1Tnsycq94dWibFG4U9I55R4qaAq3C0SMQLoxFiyoLN6HlJsAVMXLiKMOJoi+vevUDQYwAFEA5wwnSMrJS3rLb0uZ/STEN/cRfLRFLtqIP0AZxK8Pj1at82q7xPe7e1kRKB0hkfu3XQgyYZ1yXNkgHQg3c6B/2/4zJGme5zd6oqPP81Ty0ZNhjPp4xkUT+kfnKlDEGnbSjE7VdhV+n52BHGWPH1wPXIAmWBK/990fYAvZF+0xV/je2wbT4Huw6+8tyMTgFjw2rKrzWzsd5cpOIQfHkybvopOf2oEVe4W222WDVGovupWEKcgTX2vLlFP9rwIDAQAB";
 
     // 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
-    public static String notify_url = "  http://5zfwas.natappfree.cc/account/notifyUrl";
+    public static String notify_url = "  http://uhchuf.natappfree.cc/account/notifyUrl";
 
     // 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
-    public static String return_url = "  http://5zfwas.natappfree.cc/account/returnUrl";
+    public static String return_url = "  http://uhchuf.natappfree.cc/account/returnUrl";
 
     // 签名方式
     public static String sign_type = "RSA2";
@@ -37,6 +37,9 @@ public class AlipayConfig {
 
     // 支付宝网关
     public static String log_path = "C:\\";
+
+    //支付宝沙箱商家Id
+    public static final String seller_id="2088102176753347";
 
 
 //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑

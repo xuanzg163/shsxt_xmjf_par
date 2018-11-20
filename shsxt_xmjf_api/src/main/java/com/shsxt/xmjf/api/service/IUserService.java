@@ -53,4 +53,11 @@ public interface IUserService {
      */
     public ResultInfo checkRealNameStatus(Integer userId);
 
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    public  BasUser queryBasUserByUserId(Integer userId);
+
 }
