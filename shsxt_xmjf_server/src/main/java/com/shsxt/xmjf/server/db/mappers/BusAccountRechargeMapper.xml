@@ -184,4 +184,28 @@
     from bus_account_recharge
     where order_no=#{orderNo}
   </select>
+
+  <!--查询用户充值记录-->
+  <select id="queryRechargesByUserId" parameterType="com.shsxt.xmjf.api.querys.BusAccountRechargeQuery" resultType="map">
+        SELECT
+            DATE_FORMAT(
+                addtime,
+                "%Y-%m-%d %H:%i:%s"
+            ) AS time,
+            recharge_amount AS amount,
+            CASE STATUS
+        WHEN 1 THEN
+            '已支付'
+        WHEN 2 THEN
+            '未支付'
+        WHEN 0 THEN
+            '支付异常'
+        ELSE
+            '支付异常'
+        END AS STATUS
+        FROM
+            bus_account_recharge
+        WHERE
+            user_id = #{userId}
+  </select>
 </mapper>

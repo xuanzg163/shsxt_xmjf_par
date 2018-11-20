@@ -5,11 +5,15 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.shsxt.xmjf.api.constants.AlipayConfig;
 import com.shsxt.xmjf.api.constants.XmjfConstant;
 import com.shsxt.xmjf.api.enums.OrderStatus;
 import com.shsxt.xmjf.api.enums.RechaggeType;
 import com.shsxt.xmjf.api.po.*;
+import com.shsxt.xmjf.api.querys.BusAccountRechargeQuery;
 import com.shsxt.xmjf.api.service.IBasUserSecurityService;
 import com.shsxt.xmjf.api.service.IBusAccountRechargeService;
 import com.shsxt.xmjf.api.service.ISmsService;
@@ -19,7 +23,10 @@ import com.shsxt.xmjf.api.utils.MD5;
 import com.shsxt.xmjf.api.utils.RandomCodesUtils;
 import com.shsxt.xmjf.server.db.dao.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -64,6 +71,12 @@ public class BusAccountRechargeServiceImpl implements IBusAccountRechargeService
 
     @Resource
     private IUserService userService;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String,Object> valueOperations;
 
 
     /**
@@ -229,6 +242,35 @@ public class BusAccountRechargeServiceImpl implements IBusAccountRechargeService
         /*BasUser basUser=userService.queryBasUserByUserId(busAccountRecharge.getUserId());
         smsService.sendSms(basUser.getMobile(),XmjfConstant.SMS_REGISTER_SUCCESS_NOTIFY_TYPE);
 */
+    }
+
+    /**
+     * 查询用户充值记录
+     * @param busAccountRechargeQuery
+     * @return
+     */
+    @Override
+    public PageInfo<Map<String, Object>> queryRechargesByUserId(BusAccountRechargeQuery busAccountRechargeQuery) {
+        /**
+         * 加入redis 缓存
+         *   缓存添加实现思路
+         *     先到redis 查询缓存
+         *       存在   获取缓存数据
+         *       不存在
+         *           查询数据库记录
+         *             存在:存储数据到redis 缓存
+         */
+        Page<Map<String, Object>> vals = null;
+        String key = "rechargeList::pageNum::" + busAccountRechargeQuery.getPageNum() + "::pageSize::" + busAccountRechargeQuery.getPageSize() + "::userId::" + busAccountRechargeQuery.getUserId();
+        vals= (Page<Map<String, Object>>) valueOperations.get(key);
+        if(CollectionUtils.isEmpty(vals)){
+            PageHelper.startPage(busAccountRechargeQuery.getPageNum(),busAccountRechargeQuery.getPageSize());
+            vals= (Page<Map<String, Object>>) busAccountRechargeMapper.queryRechargesByUserId(busAccountRechargeQuery);
+            if(!(CollectionUtils.isEmpty(vals))){
+                valueOperations.set(key,vals);
+            }
+        }
+        return new PageInfo<Map<String, Object>>(vals);
     }
 
     /**
