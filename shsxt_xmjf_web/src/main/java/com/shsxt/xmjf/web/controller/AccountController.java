@@ -3,16 +3,21 @@ package com.shsxt.xmjf.web.controller;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.shsxt.xmjf.api.constants.AlipayConfig;
+import com.shsxt.xmjf.api.constants.XmjfConstant;
 import com.shsxt.xmjf.api.exceptions.BusiException;
+import com.shsxt.xmjf.api.model.UserModel;
+import com.shsxt.xmjf.api.service.IAccountService;
 import com.shsxt.xmjf.api.service.IBusAccountRechargeService;
 import com.shsxt.xmjf.api.utils.AssertUtil;
 import com.shsxt.xmjf.web.aop.annotations.RequireLogin;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +34,25 @@ public class AccountController extends BaseControl {
 
     @Resource
     private IBusAccountRechargeService busAccountRechargeService;
+
+    @Resource
+    private IAccountService accountService;
+
+
+    /**
+     * 查询账户资产信息
+     * @param session
+     * @return
+     */
+    @RequestMapping("countBusAccountInfoByUserId")
+    @ResponseBody
+    @RequireLogin
+    public  Map<String,Object> countBusAccountInfoByUserId(HttpSession session){
+        UserModel userModel= (UserModel) session.getAttribute(XmjfConstant.SESSION_USER);
+        return accountService.countBusAccountInfoByUserId(userModel.getUserId());
+    }
+
+
 
     @RequestMapping("index")
     @RequireLogin

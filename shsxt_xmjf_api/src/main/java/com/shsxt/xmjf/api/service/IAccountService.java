@@ -2,6 +2,8 @@ package com.shsxt.xmjf.api.service;
 
 import com.shsxt.xmjf.api.po.BusAccount;
 
+import java.util.Map;
+
 /**
  * @author zhangxuan
  * @date 2018/11/15
@@ -16,4 +18,11 @@ public interface IAccountService {
      * @return
      */
     public BusAccount queryBusAccountByUserId(Integer userId );
+
+    /**
+     * 查询账户资产信息
+     * @param userId 用户id
+     * @return Map
+     */
+    Map<String,Object> countBusAccountInfoByUserId(Integer userId);
 }

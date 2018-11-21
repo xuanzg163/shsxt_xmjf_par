@@ -6,6 +6,10 @@ import com.shsxt.xmjf.server.db.dao.BusAccountMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangxuan
@@ -28,5 +32,34 @@ public class BusAccountServiceImpl implements IAccountService {
     @Override
     public BusAccount queryBusAccountByUserId(Integer userId) {
         return busAccountMapper.queryBusAccountByUserId(userId);
+    }
+
+    /**
+     * 查询账户资产信息
+     * @param userId 用户id
+     * @return
+     */
+    @Override
+    public Map<String, Object> countBusAccountInfoByUserId(Integer userId) {
+        // List<Map<String,Object>>  总金额:23421321
+        Map<String,Object> result=new HashMap<String,Object>();
+        List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+        Map<String,Object> accountMap= busAccountMapper.countBusAccountInfoByUserId(userId);
+
+        /**
+         * 数据格式化，转换成JS识别数据
+         */
+        for(Map.Entry<String,Object> entry:accountMap.entrySet()){
+            if(!(entry.getKey().equals("总资产"))){
+                Map<String,Object> temp=new HashMap<String,Object>();
+                temp.put("name",entry.getKey());
+                temp.put("y",entry.getValue());
+                list.add(temp);
+            }else{
+                result.put("data1",entry.getValue());
+            }
+        }
+        result.put("data2",list);
+        return result;
     }
 }
