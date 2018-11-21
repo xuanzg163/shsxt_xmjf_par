@@ -2,7 +2,9 @@ $(function () {
    loadAccountInfo();
 });
 
-
+/**
+ * 载入用户资产信息
+ */
 function loadAccountInfo() {
 
     $.ajax({
