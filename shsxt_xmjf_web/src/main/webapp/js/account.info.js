@@ -7,7 +7,9 @@ $(function () {
     loadInvestIncomeInfo02();
 });
 
-
+/**
+ * 加载用户资产图
+ */
 function loadAccountInfo() {
 
     $.ajax({
@@ -71,20 +73,11 @@ function loadAccountInfo() {
         }
     });
 
-
-
-
-
-
-
-
-
-
 }
 
-
-
-
+/**
+ * 加载用户投资曲线（X轴）
+ */
 function loadInvestIncomeInfo() {
     $.ajax({
         type:"post",
@@ -131,8 +124,9 @@ function loadInvestIncomeInfo() {
     })
 }
 
-
-
+/**
+ * 加载用户投资曲线（Y轴）
+ */
 function loadInvestIncomeInfo02() {
     $.ajax({
         type:"post",
