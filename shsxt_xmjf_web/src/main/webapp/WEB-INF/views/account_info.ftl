@@ -43,7 +43,9 @@
 </div>
 
 <script type="text/javascript" src="${ctx}/js/assets/jquery-3.1.0.min.js"></script>
-<script src="${ctx}/js/assets/highchart.js"></script>
+<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+<script type="text/javascript" src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+<script type="text/javascript" src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
 <script type="text/javascript">
     var ctx="${ctx}";
 </script>
