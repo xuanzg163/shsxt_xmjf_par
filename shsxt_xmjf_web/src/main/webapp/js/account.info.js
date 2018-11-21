@@ -1,10 +1,13 @@
 $(function () {
    loadAccountInfo();
+
+   loadInvestIncomeInfo();
+
+
+    loadInvestIncomeInfo02();
 });
 
-/**
- * 载入用户资产信息
- */
+
 function loadAccountInfo() {
 
     $.ajax({
@@ -77,4 +80,108 @@ function loadAccountInfo() {
 
 
 
+}
+
+
+
+
+function loadInvestIncomeInfo() {
+    $.ajax({
+        type:"post",
+        url:ctx+"/invest/countInvestIncomeInfoByUserId",
+        dataType:"json",
+        success:function (data) {
+            var data1=data.data1;
+            var data2=data.data2;
+
+           Highcharts.chart('line_chart', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: '投资收益曲线图'
+                },
+                subtitle: {
+                    text: '数据来源:小马金服'
+                },
+                xAxis: {
+                    // List<String>
+                    categories: data1
+                },
+                yAxis: {
+                    title: {
+                        text: '金额(￥)'
+                    }
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            // 开启数据标签
+                            enabled: true
+                        },
+                        // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                        enableMouseTracking: false
+                    }
+                },
+                series:data2
+            });
+
+
+        }
+    })
+}
+
+
+
+function loadInvestIncomeInfo02() {
+    $.ajax({
+        type:"post",
+        url:ctx+"/invest/countInvestIncomeInfoByUserId",
+        dataType:"json",
+        success:function (data) {
+            var data1=data.data1;
+            var data2=data.data2;
+
+
+
+             Highcharts.chart('line_chart02',{
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: '投资收益曲线图'
+                },
+                subtitle: {
+                    text: '数据来源:小马金服'
+                },
+                xAxis: {
+                    categories:data1,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '金额(￥)'
+                    }
+                },
+                tooltip: {
+                    // head + 每个 point + footer 拼接成完整的 table
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        borderWidth: 0
+                    }
+                },
+                series:data2
+            });
+
+
+        }
+    })
 }
