@@ -105,6 +105,16 @@ public class BasItemServiceImpl implements IBasItemService {
         return basItem;
     }
 
+    /**
+     * 表更新
+     * @param basItem
+     * @return
+     */
+    @Override
+    public int update(BasItem basItem) {
+        return basItemMapper.update(basItem);
+    }
+
     @Override
     public void updateBasItemStatusToOpen(Integer itemId) {
         BasItem basItem = queryBasItemByItemId(itemId);

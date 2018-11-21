@@ -33,4 +33,11 @@ public interface IBasItemService {
      * @return
      */
     public BasItem queryBasItemByItemId(Integer itemId);
+
+    /**
+     * 表更新
+     * @param basItem
+     * @return
+     */
+    public  int update(BasItem basItem);
 }

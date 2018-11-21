@@ -40,6 +40,7 @@
     from bus_item_invest
     where id = #{id,jdbcType=INTEGER}
   </select>
+
   <insert id="insert" parameterType="com.shsxt.xmjf.api.po.BusItemInvest" >
     insert into bus_item_invest
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -191,6 +192,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="update" parameterType="com.shsxt.xmjf.api.po.BusItemInvest" >
     update bus_item_invest
     <set >
@@ -275,5 +277,17 @@
         DATE_FORMAT(bi.addtime,"%Y-%m-%d %H:%i:%s") as time
       from  bus_item_invest bi LEFT JOIN bas_user b on bi.user_id=b.id
       where bi.item_id=#{itemId}
+  </select>
+
+  <!--查询新手标-->
+  <select id="countUserInvestNewItemByUserId" parameterType="int" resultType="int">
+        SELECT
+            count(1)
+        FROM
+            bus_item_invest bii
+        LEFT JOIN bas_item bi on bii.item_id=bi.id
+        WHERE
+            bii.user_id = #{userId}
+        AND bi.item_isnew = 1 and bi.item_isalive=1
   </select>
 </mapper>

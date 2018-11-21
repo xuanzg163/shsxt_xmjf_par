@@ -75,4 +75,10 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <!--查询用户收益表-->
+  <select id="queryBusIncomeStatByUserId" parameterType="int" resultMap="BaseResultMap">
+    SELECT  <include refid="Base_Column_List"/>
+    from bus_income_stat
+    where user_id=#{userId}
+  </select>
 </mapper>

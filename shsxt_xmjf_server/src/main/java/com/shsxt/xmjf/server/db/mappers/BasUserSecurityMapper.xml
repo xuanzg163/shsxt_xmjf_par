@@ -98,6 +98,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="update" parameterType="com.shsxt.xmjf.api.po.BasUserSecurity" >
     update bas_user_security
     <set >
@@ -141,4 +142,5 @@
     from bas_user_security
     where user_id=#{userId}
   </select>
+
 </mapper>

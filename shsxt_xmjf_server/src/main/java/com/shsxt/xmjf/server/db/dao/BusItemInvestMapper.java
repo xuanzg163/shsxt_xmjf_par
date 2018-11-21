@@ -14,4 +14,11 @@ public interface BusItemInvestMapper extends BaseMapper<BusItemInvest> {
      * @return
      */
     public List<Map<String,Object>> queryInvestItemsByItemId(ItemInvestQuery itemInvestQuery);
+
+    /**
+     * 统计用户投资的新手标项目
+     * @param userId
+     * @return
+     */
+    public  int countUserInvestNewItemByUserId(Integer userId);
 }
