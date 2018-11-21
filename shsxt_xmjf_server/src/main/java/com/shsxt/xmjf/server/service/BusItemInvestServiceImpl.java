@@ -19,10 +19,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author zhangxuan
@@ -307,5 +304,41 @@ public class BusItemInvestServiceImpl implements IBusItemInvestService {
          */
         BasUser basUser = userService.queryBasUserByUserId(userId);
         // smsService.sendSms(basUser.getMobile(),XmjfConstant.SMS_INVEST_SUCCESS_NOTIFY_TYPE);
+    }
+
+    /**
+     * 统计用户投资收益信息
+     * @param userId
+     * @return
+     */
+    @Override
+    public Map<String, Object> countInvestIncomeInfoByUserId(Integer userId) {
+        Map<String,Object> result=new HashMap<String,Object>();
+        List<Object> months=new ArrayList<Object>();
+        List<Map<String,Object>> vals=busItemInvestMapper.countInvestIncomeInfoByUserId(userId);
+
+        /* 投资 收益 集合 (拼接参数)*/
+        List<Map<String,Object>> investIncomeMap=new ArrayList<Map<String,Object>>();
+        Map<String,Object> investMap=new HashMap<String,Object>();
+        investMap.put("name","投资");
+        List<Object> investVal=new ArrayList<Object>();
+        Map<String,Object> incomeMap=new HashMap<String,Object>();
+        incomeMap.put("name","收益");
+        List<Object> incomeVal=new ArrayList<Object>();
+
+        for(Map<String,Object> map:vals){
+            months.add(map.get("month"));
+            investVal.add(map.get("amount"));
+            incomeVal.add(map.get("incomeAmount"));
+        }
+        investMap.put("data",investVal);
+        incomeMap.put("data",incomeVal);
+        investIncomeMap.add(investMap);
+        investIncomeMap.add(incomeMap);
+
+        //  放入最终数据
+        result.put("data1",months);
+        result.put("data2",investIncomeMap);
+        return result;
     }
 }

@@ -28,6 +28,8 @@ public class Investcontroller {
     @Resource
     private IBusItemInvestService busItemInvestService;
 
+
+
     /**
      * 用户投资记录
      * @param itemInvestQuery
@@ -54,5 +56,18 @@ public class Investcontroller {
         UserModel userModel= (UserModel) session.getAttribute(XmjfConstant.SESSION_USER);
         busItemInvestService.addBusItemInvest(itemId,amount,userModel.getUserId(),busiPassword);
         return new ResultInfo("投资成功!");
+    }
+
+    /**
+     * 统计用户投资收益
+     * @param session
+     * @return
+     */
+    @RequireLogin
+    @RequestMapping("countInvestIncomeInfoByUserId")
+    @ResponseBody
+    public Map<String, Object> countInvestIncomeInfoByUserId(HttpSession session){
+        UserModel userModel= (UserModel) session.getAttribute(XmjfConstant.SESSION_USER);
+        return busItemInvestService.countInvestIncomeInfoByUserId(userModel.getUserId());
     }
 }

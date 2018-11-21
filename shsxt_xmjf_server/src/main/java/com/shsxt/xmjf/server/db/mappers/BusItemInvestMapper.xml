@@ -290,4 +290,49 @@
             bii.user_id = #{userId}
         AND bi.item_isnew = 1 and bi.item_isalive=1
   </select>
+
+  <!--统计用户投资收益信息-->
+  <select id="countInvestIncomeInfoByUserId" parameterType="int" resultType="map">
+          select
+            t1.month,
+            IFNULL(t2.amount,0) amount,
+            IFNULL(t3.incomeAmount,0) incomeAmount
+          from
+            (
+              select DATE_FORMAT(NOW() ,"%Y-%m")  month
+              union
+              select DATE_FORMAT(NOW()- INTERVAL 1 MONTH ,"%Y-%m") month
+              union
+              select DATE_FORMAT(NOW()- INTERVAL 2 MONTH ,"%Y-%m") month
+              union
+              select DATE_FORMAT(NOW()- INTERVAL 3 MONTH ,"%Y-%m") month
+              union
+              select DATE_FORMAT(NOW()- INTERVAL 4 MONTH ,"%Y-%m") month
+            ) t1
+          left join
+            (
+              SELECT
+                  DATE_FORMAT(addtime, "%Y-%m") month,
+                  sum(invest_amount) amount
+              FROM
+                  bus_item_invest
+              WHERE
+                  user_id = #{userId}
+              GROUP BY
+                  DATE_FORMAT(addtime, "%Y-%m")
+            ) t2 on t1.month=t2.month
+          LEFT JOIN
+            (
+              SELECT
+                  SUM(income_amout) incomeAmount,
+                  DATE_FORMAT(income_date, "%Y-%m") month
+              FROM
+                  bus_income
+              WHERE
+                  user_id = #{userId}
+              GROUP BY
+                  DATE_FORMAT(income_date, "%Y-%m")
+            ) t3  on t1.month=t3.month
+          order by t1.month asc
+  </select>
 </mapper>

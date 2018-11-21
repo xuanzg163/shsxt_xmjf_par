@@ -5,6 +5,7 @@ import com.shsxt.xmjf.api.po.BasItem;
 import com.shsxt.xmjf.api.querys.ItemInvestQuery;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,4 +33,11 @@ public interface IBusItemInvestService {
      * @param busiPassword 交易密码
      */
     public void addBusItemInvest(Integer itemId, BigDecimal amount, Integer userId, String busiPassword);
+
+    /**
+     * 统计用户投资收益信息
+     * @param userId
+     * @return
+     */
+    public  Map<String,Object> countInvestIncomeInfoByUserId(Integer userId);
 }
