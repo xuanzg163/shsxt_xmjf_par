@@ -12,6 +12,7 @@ import com.shsxt.xmjf.api.utils.MD5;
 import com.shsxt.xmjf.api.utils.RandomCodesUtils;
 import com.shsxt.xmjf.server.db.dao.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * @author zhangxuan
@@ -62,6 +64,9 @@ public class BusItemInvestServiceImpl implements IBusItemInvestService {
 
     @Resource
     private BusIntegralLogMapper busIntegralLogMapper;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
 
     /**
@@ -290,6 +295,12 @@ public class BusItemInvestServiceImpl implements IBusItemInvestService {
 
         AssertUtil.isTrue(busIntegralLogMapper.insert(busIntegralLog) < 1, XmjfConstant.OPS_FAILED_MSG);
 
+        /**
+         * 清除缓存
+         */
+        Set<String> keys=redisTemplate.keys("itemList*");
+        keys.add("basItem::itemId::"+itemId);
+        redisTemplate.delete(keys);
 
         /**
          * 短信通知

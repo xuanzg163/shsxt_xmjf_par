@@ -87,11 +87,11 @@
                     </td>
                     <td width="76">起投金额</td>
                     <td width="154">
-                            <#if item.itemSingleMinInvestment?? && item.itemSingleMinInvestment gt 0 >
-                            <em id="minInvestMoney" data-value=${item.itemSingleMinInvestment}>
-                                   ${item.itemSingleMinInvestment}元
-                              <#else >
-                              <em >
+                                  <#if item.itemSingleMinInvestment?? && item.itemSingleMinInvestment gt 0 >
+                                  <em id="minInvestMoney" data-value=${item.itemSingleMinInvestment}>
+                                  ${item.itemSingleMinInvestment}元
+                                  <#else >
+                                  <em id="minInvestMoney">
                                  无
                             </#if>
                    </em>
@@ -103,7 +103,7 @@
                          <em id="maxInvestMoney" data-value=${item.itemSingleMaxInvestment?c}>
                                 ${item.itemSingleMaxInvestment?c}元
                             <#else>
-                            <em >
+                            <em id="maxInvestMoney">
                                无限制
                         </#if>
                         </em>
@@ -139,9 +139,9 @@
 
 
         <div class="invest_panel">
-            <p class="text">剩余金额：${item.itemAccount-item.itemOngoingAccount}元</p>
+            <p class="text" id="syAmount" data-value="${(item.itemAccount-item.itemOngoingAccount)?c}">剩余金额：${item.itemAccount-item.itemOngoingAccount}元</p>
              <#if userInfo??>
-                 <p class="text left_account"><span id="ye" data-value=${account.usable?c}>账户余额：${account.usable}元</span>
+                 <p class="text left_account"><span id="usable" data-value=${account.usable?c}>账户余额：${account.usable}元</span>
                  <a class="charge" href="javascript:toRecharge()">充值</a>
                  </p>
              </#if>
@@ -153,7 +153,7 @@
                      <#if item.itemStatus ==1>
                          <a href="javascript:void(0)"><input class='invest_button fl' style="background: #c9c9c9;cursor: default" type="button"  value="即将开放"></a>
                         <#elseif  item.itemStatus==10>
-                            <a href="javascript:void(0)"><input class='invest_button fl'  onclick="doInvest()" type="button"  value="立即投资"></a>
+                            <a href="javascript:void(0)"><input class='invest_button fl'  id="doInvest" onclick="doInvest()" type="button"  value="立即投资"></a>
                         <#elseif item.itemStatus==20>
                          <a href="javascript:void(0)"><input class='invest_button fl' style="background: #c9c9c9;cursor: default" type="button"  value="已抢完"></a>
                         <#elseif  item.itemStatus==30 || item.itemStatus==31 >
@@ -296,9 +296,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 
 <input type="hidden" value="${item.id?c}" id="itemId"/>

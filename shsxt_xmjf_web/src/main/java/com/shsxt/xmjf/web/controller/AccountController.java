@@ -33,7 +33,7 @@ public class AccountController extends BaseControl {
     @RequestMapping("index")
     @RequireLogin
     public String index() {
-        return "account";
+        return "account_info";
     }
 
     @RequestMapping("recharge")
