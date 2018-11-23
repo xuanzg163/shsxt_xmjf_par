@@ -12,7 +12,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 /**
- * 切面，前置通知
+ * AOP实现类
+ * 使用前置通知
  * @author zhangxuan
  * @date 2018/11/11
  * @time 21:27

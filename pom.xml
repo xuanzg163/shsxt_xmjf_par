@@ -56,7 +56,7 @@
             <version>4.3.2.RELEASE</version>
         </dependency>
 
-        <!-- aspectj切面编程的jar -->
+        <!--spring AOP aspectj切面编程的jar -->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
